@@ -1,52 +1,43 @@
 #ifndef STATUS_H
 #define STATUS_H
 
-#include <vector>
+#define ERROR_READING -9999
+
 #include "config.h"
+#include <vector>
 
-enum class DISPLAY_STATUS
-{
-  NORMAL = 0, INFO, OFF
-};
-
-class Status{
+enum class DISPLAY_STATUS { NORMAL = 0, INFO, OFF };
+enum class TRANSITION_TYPE { COLD, HEAT };
+class Status {
 public:
-  //sensors
+  // sensors last lecture
   std::vector<float> temperatures;
   bool door;
 
-  //relays
-  // bool cold = false;
-  // bool hot = false;
-  // bool fan = false;
-  // bool light = false;
-
-  //calculated
+  // calculated
   float avg_temperature;
 
-  Status(){};
+  bool inTransition = false;
+  TRANSITION_TYPE trasitionType;
+  float lastTempReferencia = ERROR_READING;
 
-  void init(Config *config);
+  int temporizador = 0;// milisegundos que quedan de la accion en curso
+  int bloqueoSeguridad = 0;// milisegundos que quedan de bloqueo
+
+  Status();
+
+  void init(Config* config);
 
   void update(void);
-  //void setRelay(ACTION relay,bool active);
 
-  Config* config(){return m_config;}; 
+  Config* getConfig();
 
-  DISPLAY_STATUS getDisplayStatus(){ return m_display_status;};
-  void nextDisplayStatus(){
-    if(m_display_status == DISPLAY_STATUS::OFF){
-      m_display_status = (DISPLAY_STATUS)0;
-    }else{
-      m_display_status = (DISPLAY_STATUS)( ((int)m_display_status) + 1);
-    }
-  }
+  DISPLAY_STATUS getDisplayStatus();
+  void nextDisplayStatus();
 
 private:
-  //std::vector<Sensor*> m_sensors;  //TODO class sensor
-  Config *m_config;
+  Config* m_config;
   DISPLAY_STATUS m_display_status;
 };
-
 
 #endif

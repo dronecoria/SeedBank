@@ -1,7 +1,11 @@
 {
     "name": "nevera de pruebas",
     "active": true,
-    "tablaTemperaturas": [{hour:"00:00:00",temp:10},{hour:"00:30:00",temp:10},{hour:"01:00:00",temp:10},{hour:"01:30:00",temp:12},{hour:"02:00:00",temp:14},{hour:"02:30:00",temp:16},{hour:"03:00:00",temp:18},{hour:"03:30:00",temp:20},{hour:"04:00:00",temp:20},{hour:"04:30:00",temp:20},{hour:"05:00:00",temp:20},{hour:"05:30:00",temp:20},{hour:"06:00:00",temp:20},{hour:"06:30:00",temp:20},{hour:"07:00:00",temp:20},{hour:"07:30:00",temp:20},{hour:"08:00:00",temp:20},{hour:"08:30:00",temp:20},{hour:"09:00:00",temp:20},{hour:"09:30:00",temp:20},{hour:"10:00:00",temp:20},{hour:"10:30:00",temp:20},{hour:"11:00:00",temp:20},{hour:"11:30:00",temp:20},{hour:"12:00:00",temp:20},{hour:"12:30:00",temp:20},{hour:"13:00:00",temp:20},{hour:"13:30:00",temp:20},{hour:"14:00:00",temp:20},{hour:"14:30:00",temp:20},{hour:"15:00:00",temp:20},{hour:"15:30:00",temp:20},{hour:"16:00:00",temp:20},{hour:"16:30:00",temp:20},{hour:"17:00:00",temp:20},{hour:"17:30:00",temp:20},{hour:"18:00:00",temp:18},{hour:"18:30:00",temp:16},{hour:"19:00:00",temp:14},{hour:"23:30:00",temp:10},{hour:"19:30:00",temp:12},{hour:"20:00:00",temp:10},{hour:"20:30:00",temp:10},{hour:"21:00:00",temp:10},{hour:"21:30:00",temp:10},{hour:"22:00:00",temp:10},{hour:"22:30:00",temp:10},{hour:"23:00:00",temp:10}],
+    "tablaTemperaturas": [
+        10, 10, 10, 12, 14, 16, 18, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+        18, 16, 14, 10, 12, 10, 10, 10, 10, 10, 10, 10
+    ],
     "condiciones": {
         "margen1": 0.7,
         "margen2": 0.8,
@@ -25,11 +29,11 @@
         "intervaloDeSeguridad": 300
     },
     "sensors": [
-        {"type":"bmp280","pin": "0x76"},
-        {"type":"bmp280","pin":"0x77"}
+        { "type": "bmp280", "pin": 118 },
+        { "type": "bmp280", "pin": 119 }
     ],
-    "cold": {"type":"relay", "pin":0},
-    "hot": {"type":"relay", "pin":15},
-    "fan": {"type":"relay", "pin":16},
-    "light": {"type":"relay", "pin":17},
+    "cold": { "type": "relay", "pin": 0 },
+    "heat": { "type": "relay", "pin": 15 },
+    "fan": { "type": "relay", "pin": 16 },
+    "light": { "type": "relay", "pin": 17 }
 }

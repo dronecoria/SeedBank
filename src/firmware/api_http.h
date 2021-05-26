@@ -1,18 +1,12 @@
 #ifndef API_HTTP_H
 #define API_HTTP_H
 
-#include <WiFi.h>
-#include <WiFiClient.h>
 #include <ESPAsyncWebServer.h>
-#include <SPIFFS.h>
+#include <WiFi.h>
 
-//#include <ESPmDNS.h>
-
-
-class Api_http
-{
+class Api_http {
 public:
-  Api_http():m_server(80){};
+  Api_http();
   void init();
 
   void update();
@@ -23,9 +17,8 @@ private:
 
 String processor(const String& var);
 
-//time
+// time
 void printLocalTime();
 void setClock();
-
 
 #endif

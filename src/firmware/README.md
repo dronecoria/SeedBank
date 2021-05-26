@@ -5,6 +5,7 @@
     * ESPAsyncWebServer, Wifi, WifiClient,SPIFFS for Asyncronous webserver
     * Adafruit_GFX, Adafruit_ST7789 for display
     * Adafruit_BMP280 sensor temperature
+    * (ArduinoJson)[https://arduinojson.org]
 
 ## How to upload data directory to SPIFFS
 
