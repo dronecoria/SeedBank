@@ -16,3 +16,4 @@
     * Create PID or similar control
     * Communication with server for save logs
     * Send alerts
+    * Instalation instructions.
