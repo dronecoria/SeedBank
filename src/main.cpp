@@ -1,6 +1,7 @@
 #include "api_http.h"
 #include "config.h"
-#include "display.h"
+// #include "display_st7789.h"
+#include "display_ssd1306.h"
 #include "status.h"
 #include <SPIFFS.h>
 
@@ -17,80 +18,12 @@ void IRAM_ATTR Ext_INT1_ISR() {
 	last_interrupt_time = interrupt_time;
 }
 
-void setup(void) {
-	Serial.begin(9600);
-	Serial.print(F("Init"));
-
-	SPIFFS.begin();
-
-	Config* config = new Config();
-	config->init();
-
-	state.init(config);
-
-	TaskHandle_t Task_display;
-
-	xTaskCreatePinnedToCore(loop_display,  /* Function to implement the task */
-		"Display",     /* Name of the task */
-		10000,         /* Stack size in words */
-		NULL,          /* Task input parameter */
-		0,             /* Priority of the task */
-		&Task_display, /* Task handle. */
-		0);            /* Core where the task should run */
-
-	api_http.init();
-
-	// botton
-	pinMode(pin_botton, INPUT);
-	attachInterrupt(pin_botton, Ext_INT1_ISR, RISING);
-}
-
-void loop() {
-	state.update();
-
-	// TODO timetable
-	// test
-	// if (state.temperatures[0] > 24) {
-	//   state.getConfig()->cold->enable();
-	// } else {
-	//   state.getConfig()->cold->disable();
-	// }
-	// if (state.temperatures[1] > 24) {
-	//   state.getConfig()->light->enable();
-	// } else {
-	//   state.getConfig()->light->enable();
-	// }
-	timetable();
-
-	int interval = 500;
-	if (state.temporizador > 0) {
-		state.temporizador -= interval;
-		if (state.temporizador <= 0) {
-			//apagar frio o calor
-			//TODO falta variable para ver cual
-			state.getConfig()->cold->disable();
-			state.getConfig()->heat->disable();
-			state.bloqueoSeguridad = state.getConfig()->condiciones_intervaloDeSeguridad * 1000;
-			state.temporizador = 0;
-		}
-		Serial.printf("\nTemporizador %d", state.temporizador);
-	}
-	if (state.bloqueoSeguridad > 0) {
-		state.bloqueoSeguridad -= interval;
-		if (state.bloqueoSeguridad <= 0) {
-			state.bloqueoSeguridad = 0;
-		}
-		Serial.printf("\nBloqueoSeguridad %d", state.bloqueoSeguridad);
-	}
-	delay(interval);
-}
-
 int minutosTranscurridosDia()
 {
 	char h[80];
 	char m[80];
-	char s[80];
-	char p[80];
+	// char s[80];
+	// char p[80];
 
 	struct tm timeinfo;
 	if (!getLocalTime(&timeinfo)) {
@@ -103,6 +36,7 @@ int minutosTranscurridosDia()
 
 	return atoi(h) * 60 + atoi(m);
 }
+
 
 void timetable()
 {
@@ -295,3 +229,73 @@ void timetable()
 
 
 }
+
+void setup(void) {
+	Serial.begin(115200);
+	Serial.print(F("Init"));
+
+	SPIFFS.begin();
+
+	Config* config = new Config();
+	config->init();
+
+	state.init(config);
+
+	TaskHandle_t Task_display;
+
+	xTaskCreatePinnedToCore(loop_display,  /* Function to implement the task */
+		"Display",     /* Name of the task */
+		10000,         /* Stack size in words */
+		NULL,          /* Task input parameter */
+		0,             /* Priority of the task */
+		&Task_display, /* Task handle. */
+		0);            /* Core where the task should run */
+
+	api_http.init();
+
+	// botton
+	pinMode(pin_botton, INPUT);
+	attachInterrupt(pin_botton, Ext_INT1_ISR, RISING);
+}
+
+void loop() {
+	state.update();
+
+	// TODO timetable
+	// test
+	// if (state.temperatures[0] > 24) {
+	//   state.getConfig()->cold->enable();
+	// } else {
+	//   state.getConfig()->cold->disable();
+	// }
+	// if (state.temperatures[1] > 24) {
+	//   state.getConfig()->light->enable();
+	// } else {
+	//   state.getConfig()->light->enable();
+	// }
+	timetable();
+
+	int interval = 1200;
+	if (state.temporizador > 0) {
+		state.temporizador -= interval;
+		if (state.temporizador <= 0) {
+			//apagar frio o calor
+			//TODO falta variable para ver cual
+			state.getConfig()->cold->disable();
+			state.getConfig()->heat->disable();
+			state.bloqueoSeguridad = state.getConfig()->condiciones_intervaloDeSeguridad * 1000;
+			state.temporizador = 0;
+		}
+		Serial.printf("\nTemporizador %d", state.temporizador);
+	}
+	if (state.bloqueoSeguridad > 0) {
+		state.bloqueoSeguridad -= interval;
+		if (state.bloqueoSeguridad <= 0) {
+			state.bloqueoSeguridad = 0;
+		}
+		Serial.printf("\nBloqueoSeguridad %d", state.bloqueoSeguridad);
+	}
+	delay(interval);
+}
+
+

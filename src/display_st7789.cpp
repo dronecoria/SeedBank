@@ -1,10 +1,10 @@
-#include "display.h"
+#include "display_st7789.h"
 #include "api_http.h"
 #include "status.h"
 
 extern Status state;
 
-void loop_display(void* parameter) {
+void loop_display_st7789(void* parameter) {
   Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
   // if the display has CS pin try with SPI_MODE0

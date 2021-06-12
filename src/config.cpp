@@ -56,6 +56,9 @@ void Config::init(void) {
     if (repo["type"] == "bmp280") {
       this->sensors.push_back(new Sensor_BMP280((int)repo["pin"]));
     }
+    else if (repo["type"] == "hdc2080") {
+      this->sensors.push_back(new Sensor_HDC2080((int)repo["pin"]));
+    }
     else if (repo["type"] == "bmdummyp280") {
       this->sensors.push_back(new Sensor_DUMMY((int)repo["pin"]));
     }

@@ -20,7 +20,9 @@ void Status::update(void) {
     this->avg_temperature /= this->temperatures.size();
   }
   else {
-    this->avg_temperature = ERROR_READING;
+    for (auto t : this->temperatures) {
+      this->avg_temperature = t;
+    }
   }
 }
 

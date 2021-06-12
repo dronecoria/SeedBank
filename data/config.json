@@ -29,8 +29,7 @@
         "intervaloDeSeguridad": 300
     },
     "sensors": [
-        { "type": "bmp280", "pin": 118 },
-        { "type": "bmp280", "pin": 119 }
+        { "type": "hdc2080", "pin": 64 }
     ],
     "cold": { "type": "relay", "pin": 0 },
     "heat": { "type": "relay", "pin": 15 },

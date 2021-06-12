@@ -1,5 +1,5 @@
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef DISPLAY_ST7789_H
+#define DISPLAY_ST7789_H
 
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
@@ -9,7 +9,7 @@
 #define TFT_DC 4
 #define TFT_CS -1
 
-void loop_display(void* parameter);
+void loop_display_st7789(void* parameter);
 void display_time(Adafruit_ST7789& tft);
 
 // http://javl.github.io/image2cpp/

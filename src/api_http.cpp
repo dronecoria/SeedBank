@@ -10,8 +10,8 @@ extern Status state;
 Api_http::Api_http() : m_server(80) {}
 
 void Api_http::init() {
-  const char* ssid = "DIGIFIBRA-YEbb";
-  const char* password = "xs23gYehFD";
+  const char* ssid = "SONRIE";
+  const char* password = "maguitoblanco";
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
