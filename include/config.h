@@ -17,13 +17,19 @@ public:
     char *get_ntp_server();
     long int get_ntp_gmt_offset();
     long int get_ntp_daylight_offset();
+    const char *get_wifi_ssid();
+    const char *get_wifi_password();
 
 private:
     MODE m_mode = MODE::SETUP;
 
     char *m_ntp_server = NULL;
+
     long int m_ntp_gmt_offset = 0;
     long int m_ntp_daylight_offset = 0;
+
+    char *m_wifi_ssid = NULL;
+    char *m_wifi_password = NULL;
 
     std::vector<Sensor*> m_sensors;
 

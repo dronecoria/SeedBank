@@ -7,10 +7,10 @@
 class State {
 public:
     State(Config *config);
-    bool is_clock_set();
+    bool is_clock_set = false;
+
 private:
     Config *m_config;
-    bool m_is_clock_set = false;
 };
 
 #endif

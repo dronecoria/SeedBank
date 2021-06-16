@@ -1,13 +1,13 @@
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef DECISOR_H
+#define DECISOR_H
 
 #include "config.h"
 #include "state.h"
 
-class Display {
+class Decisor {
 public:
     TaskHandle_t task;
-    Display(Config *config, State *state);
+    Decisor(Config *config, State *state);
     void loop();
 
 private:

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Configurator</title>
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarController">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
+
+              <div id="navbarController" class="navbar-menu">
+                <div class="navbar-start">
+                  <a class="navbar-item" href="/">
+                    Info
+                  </a>
+
+                  <a class="navbar-item" href="/config">
+                    Config
+                  </a>
+                </div>
+              </div>
+        </nav>
+
+
+        <main>
+	        <h1>INFO</h1>
+            <label>
+                Average temperature:
+    	        <output id="avgTemp">--</output>
+            </label>
+        </main>
+
+
+
+	  <script type="text/javascript" src="/index.js"></script>
+    </body>
+</html>

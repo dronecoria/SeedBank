@@ -57,6 +57,8 @@ void Config::read() {
     this->m_ntp_server = this->decode_json_key_as_name(doc, "ntp_server", "pool.ntp.org");
     this->m_ntp_gmt_offset = this->decode_json_key_as_long(doc, "ntp_gmt_offset", 0);
     this->m_ntp_daylight_offset = this->decode_json_key_as_long(doc, "ntp_daylight_offset", 0);
+    this->m_wifi_ssid = this->decode_json_key_as_name(doc, "wifi_ssid", nullptr);
+    this->m_wifi_password = this->decode_json_key_as_name(doc, "wifi_password", nullptr);
 
 }
 
@@ -76,6 +78,14 @@ long int Config::get_ntp_daylight_offset() {
     return this->m_ntp_daylight_offset;
 }
 
+const char *Config::get_wifi_ssid() {
+    return static_cast<const char *> (this->m_wifi_ssid);
+}
+
+const char *Config::get_wifi_password() {
+    return static_cast<const char *> (this->m_wifi_password);
+}
+
 MODE Config::decode_mode(const char *mode_str) {
     if (strcmp(mode_str, "setup") == 0) {
         return MODE::SETUP;
@@ -93,10 +103,10 @@ long int Config::decode_json_key_as_long(JsonDocument &doc, const char *key, lon
 }
 
 char *Config::decode_json_key_as_name(JsonDocument &doc, const char *key, const char *default_value) {
-    char *name = NULL;
+    char *name = nullptr;
     if (doc.containsKey(key)) {
         name = this->decode_name((const char *)doc[key]);
-    } else {
+    } else if (default_value != nullptr) {
         name = this->decode_name(default_value);
     }
     return name;

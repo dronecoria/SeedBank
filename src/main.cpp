@@ -5,11 +5,13 @@
 #include "state.h"
 #include "display.h"
 #include "webserver.h"
+#include "decisor.h"
 
 Config *config;
 State *state;
 Display *display;
 WebServer *webserver;
+Decisor *decisor;
 
 
 void setup() {
@@ -31,26 +33,17 @@ void setup() {
 
     // Lauch WebServer task
     webserver = new WebServer(config, state);
+
+    // Lauch Decisor task
+    decisor = new Decisor(config, state);
 }
 
 void loop() {
 
     // Loop de prueba
-    struct tm   time_info;
-    char        time_str[20];  // 2021-05-21 12:32:45
-
     Serial.println("Main::loop START");
-    if (state->is_clock_set()) {
-        Serial.println("Main::loop getLocalTime");
-        getLocalTime(&time_info);
-        Serial.println("Main::loop strftime");
-        strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", &time_info);
-        Serial.print("Main::Time ");
-        Serial.println(time_str);
-    } else {
-        Serial.println("Main::Clock is not set");
-    }
-    Serial.println("Main::loop delay");
+    display->loop();
     delay(1000);
+    Serial.println("Main::loop delay");
     Serial.println("Main::loop END");
 }
