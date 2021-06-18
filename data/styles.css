@@ -4,4 +4,32 @@
     padding:0.5em;
 }
 
+fieldset label {
+    display: block;
+    margin: 1em;
+}
+fieldset label input {
+    padding: 0.2em;
+    margin-left: 2em;
+}
 
+fieldset legend {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+button {
+    padding: 0.5em 1.5em;
+    cursor: pointer;
+    margin: 0.5em;
+    font-size: 1.05em;
+}
+
+#log{
+padding: 2em;
+border: 1px dotted rgb(77, 77, 77);
+background-color: rgb(194, 194, 194);
+overflow: auto;
+margin: 0.5em;
+font-size: 1em;
+}
