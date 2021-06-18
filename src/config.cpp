@@ -2,7 +2,6 @@
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
 
-#define CONFIG_FILENAME "/config.json"
 
 Config::Config() {
     Serial.println("Config::Setup");

@@ -5,6 +5,8 @@
 #include "sensor.h"
 #include "actuator.h"
 
+#define CONFIG_FILENAME "/config.json"
+
 enum class MODE { SETUP = 0, NORMAL };
 
 class Config {

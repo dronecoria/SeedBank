@@ -1,5 +1,5 @@
-#include <sys/time.h>
 #include <Arduino.h>
+#include <sys/time.h>
 #include <WiFi.h>
 #include <SPIFFS.h>
 #include "webserver.h"
@@ -33,6 +33,8 @@ WebServer::WebServer(Config *config, State *state) {
 
 void WebServer::loop() {
     Serial.println("WebServer::loop");
+    Serial.println(WiFi.SSID());
+    Serial.println(WiFi.localIP());
     // TODO
     if (!this->m_initialized) {
         this->init();
@@ -78,10 +80,11 @@ void WebServer::init_wifi_client() {
     int tries = 0;
     WiFi.mode(WIFI_STA);
     WiFi.begin(this->m_config->get_wifi_ssid(), this->m_config->get_wifi_password());
-    while (WiFi.status() != WL_CONNECTED || tries < 10)
+    while (WiFi.status() != WL_CONNECTED)
     {
         delay(1000);
         Serial.print('.');
+        if(tries >= 10) break;
         tries++;
     }
     if (tries >= 10) {
@@ -177,7 +180,7 @@ void save_setup(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_
 {
     String bodyContent = GetBodyContent(data, len);
 
-    File file = SPIFFS.open("/config.json", FILE_WRITE);
+    File file = SPIFFS.open(CONFIG_FILENAME, FILE_WRITE);
     if (!file) {
         Serial.println("Failed to open file for writing");
         return;

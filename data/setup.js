@@ -9,6 +9,12 @@ function ready(fn) {
 ready(function () {
 
 
+    const divLog = document.querySelector("#log");
+    fetch("/config.json")
+        .then(response => response.json())
+        .then(data => { console.log(data); divLog.innerHTML = JSON.stringify(data); });
+
+
     const formSetup = document.querySelector("form[name=setup]");
 
     formSetup.addEventListener("submit",async function (event) {
@@ -16,10 +22,10 @@ ready(function () {
 
         const data = {
             mode: "normal",
-            ntp_server: "pool.ntp.org",
-            ntp_gmt_offset: 0,
             wifi_ssid: this["wifi_ssid"].value,
-            wifi_password: this["wifi_password"].value
+            wifi_password: this["wifi_password"].value,
+            ntp_server: this["ntp_server"].value,
+            ntp_gmt_offset: this["ntp_gmt_offset"].value
         };
         const options = {
             method: "POST",
