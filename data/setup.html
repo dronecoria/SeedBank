@@ -35,7 +35,13 @@
         <main>
             <h1>SETUP</h1>
             <form name="setup">
-                <label> Working mode: %MODE_SELECT_LIST% </label>
+                <label>
+                    Working mode:
+                    <select name="mode">
+                        <option value="setup">Setup</option>
+                        <option value="normal">Normal</option>
+                    </select>
+                </label>
                 <fieldset>
                     <legend>Wifi settings:</legend>
                     <label>
@@ -45,7 +51,6 @@
                             type="text"
                             placeholder="Wifi ssid"
                             required
-                            value="%WIFI_SSID%"
                         />
                     </label>
                     <label>
@@ -54,7 +59,6 @@
                             name="wifi_password"
                             type="text"
                             placeholder="Wifi password"
-                            value="%WIFI_PASSWORD%"
                         />
                     </label>
                 </fieldset>
@@ -67,7 +71,6 @@
                             type="text"
                             placeholder="pool.ntp.org"
                             required
-                            value="%NTP_SERVER%"
                         />
                     </label>
                     <label>
@@ -77,12 +80,32 @@
                             type="text"
                             placeholder="0"
                             required
-                            value="%NTP_GMT_OFFSET%"
                         />
                     </label>
                     <br />
-                    <output>--</output>
+                    <output id="time"></output>
                     <button type="button">Sync</button>
+                </fieldset>
+                <fieldset id="sensors">
+                    <legend>Sensors <button id="add_sensor" type="button" class="mini">+</button></legend>
+                    <template>
+                        <div>
+                            <label class="inline">
+                                <select name="type" data-sensor="">
+                                    <option>HDC2080</option>
+                                    <option>BMP280</option>
+                                </select>
+                            </label>
+                            <label class="inline">
+                                <input name="value" type="number" data-sensor="">
+                            </label>
+                            <button type="button" class="mini inline del_sensor">-</button>
+                        </div>
+                    </template>
+                </fieldset>
+                <fieldset id="actuators">
+                    <legend>Actuators</legend>
+
                 </fieldset>
                 <button name="save" type="submit">SAVE</button>
             </form>

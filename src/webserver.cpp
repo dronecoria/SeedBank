@@ -4,9 +4,6 @@
 #include <SPIFFS.h>
 #include "webserver.h"
 
-//TODO eliminar html_preprocessor y pasar los datos por js
-extern Config *config;
-
 void loop_webserver_task(void *p_webserver) {
     WebServer *webserver = (WebServer *) p_webserver;
     while(true) {
@@ -96,22 +93,6 @@ void WebServer::init_wifi_client() {
     }
 }
 
-String html_preprocessor(const String& var) {
-    if (var == "MODE")           return String((int)config->get_mode());
-    if (var == "WIFI_SSID")      return config->get_wifi_ssid();
-    if (var == "WIFI_PASSWORD")  return config->get_wifi_password();
-    if (var == "NTP_SERVER")     return config->get_ntp_server();
-    if (var == "NTP_GMT_OFFSET")     return String((long int)config->get_ntp_gmt_offset());
-    if (var == "MODE_SELECT_LIST") {
-        String select = "<select>";
-        select += "</select>";
-        return select;
-    }
-
-    return String();
-}
-
-
 void WebServer::init_server() {
 
     if (this->m_webserver != nullptr) {
@@ -121,19 +102,21 @@ void WebServer::init_server() {
     }
     this->m_webserver = new AsyncWebServer(80);
 
-
     // routes
-
     String home_page = (this->m_wifi_mode == WIFI_MODE::ACCESS_POINT) ? "/setup.html" : "/index.html";
     this->m_webserver->on("/", HTTP_GET, [home_page](AsyncWebServerRequest *request) {
-        request->send(SPIFFS, home_page, String(), false, html_preprocessor);
+        request->send(SPIFFS, home_page);
         });
 
     this->m_webserver->on("/save_setup", HTTP_POST, [](AsyncWebServerRequest* request) {}, NULL, save_setup);
 
+    this->m_webserver->on("/get_time", HTTP_GET, [](AsyncWebServerRequest* request) {
+        request->send(200,"text/plain",get_time());
+    });
+
     this->m_webserver->onNotFound([](AsyncWebServerRequest *request) {
         if (SPIFFS.exists(request->url())) {
-            request->send(SPIFFS, request->url(), String(), false, html_preprocessor);
+            request->send(SPIFFS, request->url());
         }
         else {
             request->send(400, "text/plain", "404 Not found");
@@ -141,7 +124,6 @@ void WebServer::init_server() {
         });
 
     this->m_webserver->begin();
-
 }
 
 void WebServer::check_ntp() {
@@ -164,6 +146,16 @@ void WebServer::set_default_time() {
     // TODO: Set this variable on check_ntp
     this->m_state->is_clock_set = true;
 
+}
+
+String get_time()
+{
+    struct tm   time_info;
+    char        time_str[20];  // 2021-05-21 12:32:45
+
+    getLocalTime(&time_info);
+    strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", &time_info);
+    return time_str;
 }
 
 

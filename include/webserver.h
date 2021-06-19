@@ -12,7 +12,6 @@ public:
     WebServer(Config *config, State *state);
     void loop();
 
-
 private:
     Config *m_config;
     State *m_state;
@@ -29,13 +28,10 @@ private:
     void init_server();
     void send_data();
 
-
 };
 
-String html_preprocessor(const String &var);
-
+String get_time();
 void save_setup(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
 String GetBodyContent(uint8_t *data, size_t len);
-
 
 #endif
