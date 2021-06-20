@@ -10,7 +10,7 @@ float Sensor::get_last_value() { return this->m_last_value; }
 Sensor_DS18B20::Sensor_DS18B20(int pin) {
     int i = 0;
 
-    this->m_type = SENSOR_TYPE::DS18D20;
+    this->m_type = SENSOR_TYPE::DS18B20;
     this->m_pin = pin;
     this->m_bus = new OneWire(this->m_pin);
     this->m_sensors = new DallasTemperature(this->m_bus);

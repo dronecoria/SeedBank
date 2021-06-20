@@ -17,7 +17,7 @@
 #define DS18B20_MAX_COUNT 2
 #endif
 
-enum class SENSOR_TYPE { NONE, DHT22, DS18D20, BMP280, HDC2080, DUMMY, DOOR, BUTTON };
+enum class SENSOR_TYPE { NONE, DHT22, DS18B20, BMP280, HDC2080, DUMMY, DOOR, BUTTON };
 
 // --------------------------------------------------------------------------
 // Sensor base class
