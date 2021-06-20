@@ -39,11 +39,6 @@ void setup() {
 }
 
 void loop() {
-
-    // Loop de prueba
-    Serial.println("Main::loop START");
     display->loop();
     delay(1000);
-    Serial.println("Main::loop delay");
-    Serial.println("Main::loop END");
 }

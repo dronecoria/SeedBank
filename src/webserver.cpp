@@ -29,8 +29,9 @@ WebServer::WebServer(Config *config, State *state) {
 }
 
 void WebServer::loop() {
-    Serial.println("WebServer::loop");
-    Serial.println(WiFi.SSID());
+    Serial.print("WebServer::loop - SSID: ");
+    Serial.print(WiFi.SSID());
+    Serial.print(" - IP: ");
     Serial.println(WiFi.localIP());
     // TODO
     if (!this->m_initialized) {

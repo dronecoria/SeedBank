@@ -56,6 +56,17 @@ void Config::read() {
     this->m_wifi_ssid = this->decode_json_key_as_name(doc, "wifi_ssid", "");
     this->m_wifi_password = this->decode_json_key_as_name(doc, "wifi_password", "");
 
+    for (JsonObject repo : doc["sensors"].as<JsonArray>()) {
+        if (repo["type"] == "DS18B20") {
+            this->sensors.push_back(new Sensor_DS18B20((int)repo["value"]));
+        }
+        if (repo["type"] == "HDC2080") {
+            this->sensors.push_back(new Sensor_HDC2080((int)repo["value"]));
+        }
+        else if (repo["type"] == "BMP280") {
+            this->sensors.push_back(new Sensor_BMP280((int)repo["value"]));
+        }
+    }
 }
 
 MODE Config::get_mode() {

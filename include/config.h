@@ -22,6 +22,15 @@ public:
     String get_wifi_ssid();
     String get_wifi_password();
 
+    std::vector<Sensor*> sensors;
+    Sensor_DOOR *door = nullptr;
+    Sensor_BUTTON *button = nullptr;
+
+    Relay* cold = nullptr;
+    Relay* heat = nullptr;
+    Relay* fan = nullptr;
+    Relay* light = nullptr;
+
 private:
     MODE m_mode = MODE::SETUP;
 
@@ -32,13 +41,6 @@ private:
 
     String m_wifi_ssid = "";
     String m_wifi_password = "";
-
-    std::vector<Sensor*> m_sensors;
-
-    Relay* m_cold;
-    Relay* m_heat;
-    Relay* m_fan;
-    Relay* m_light;
 
     MODE decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE default_value);
     long decode_json_key_as_long(JsonDocument &doc, const char *key, long int default_value);

@@ -1,4 +1,5 @@
 #include "display.h"
+#include "sensor.h"
 
 /*
 void loop_display_task(void *p_display) {
@@ -32,16 +33,14 @@ void Display::loop() {
     struct tm   time_info;
     char        time_str[20];  // 2021-05-21 12:32:45
 
-    Serial.println("Display::loop START");
+    Serial.print("Display::loop");
     if (this->m_state->is_clock_set) {
-        Serial.println("Display::loop getLocalTime");
         getLocalTime(&time_info);
-        Serial.println("Display::loop strftime");
         strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", &time_info);
-        Serial.print("Display::Time ");
-        Serial.println(time_str);
+        Serial.print(" - Time: ");
+        Serial.print(time_str);
+        Serial.println("");
     } else {
         Serial.println("Display::Clock is not set");
     }
-    Serial.println("Display::loop END");
 }

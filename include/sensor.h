@@ -3,8 +3,21 @@
 
 #include <HDC2080.h>
 #include <Adafruit_BMP280.h>
+#include <Wire.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
-enum class SENSOR_TYPE { NONE, DHT22, BMP280, HDC2080, DUMMY, DOOR, BUTTON };
+#define TEMP_ERROR_READING -1000.0
+
+#ifndef DS18B20_TEMP_PRECISION
+#define DS18B20_TEMP_PRECISION 12
+#endif
+
+#ifndef DS18B20_MAX_COUNT
+#define DS18B20_MAX_COUNT 2
+#endif
+
+enum class SENSOR_TYPE { NONE, DHT22, DS18D20, BMP280, HDC2080, DUMMY, DOOR, BUTTON };
 
 // --------------------------------------------------------------------------
 // Sensor base class
@@ -13,10 +26,32 @@ class Sensor {
 public:
     Sensor();
     virtual float get_value();
+    float get_last_value();
 
 protected:
     SENSOR_TYPE m_type = SENSOR_TYPE::NONE;
     int m_pin = -1;
+    float m_last_value = TEMP_ERROR_READING;
+};
+
+// --------------------------------------------------------------------------
+// Sensor DS18B20: Maxim, 1-Wire interfaz, +/- 0.5 ºC
+// --------------------------------------------------------------------------
+class Sensor_DS18B20 : public Sensor {
+public:
+    Sensor_DS18B20(int pin);
+    ~Sensor_DS18B20();
+    float get_value(void);
+    int get_count(void);
+    float get_value_by_index(int index);
+
+private:
+    OneWire *m_bus = nullptr;
+    DallasTemperature *m_sensors = nullptr;
+    DeviceAddress m_addresses[DS18B20_MAX_COUNT];
+    int m_count = 0;
+
+    float m_get_value_by_index(int index);
 };
 
 // --------------------------------------------------------------------------

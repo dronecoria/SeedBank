@@ -25,6 +25,12 @@ Decisor::Decisor(Config *config, State *state) {
 }
 
 void Decisor::loop() {
-    Serial.println("Decisor::loop");
-    // TODO
+    float t = this->m_state->get_avg_temperature();
+
+    Serial.print("Decisor::loop");
+    Serial.print(" - Avg Temp: ");
+    Serial.print(t);
+    Serial.print(" - All: ");
+    this->m_state->print_all_temperatures();
+    Serial.println("");
 }
