@@ -16,22 +16,22 @@ public:
     void reset();
     void read();
     MODE get_mode();
-    char *get_ntp_server();
+    String get_ntp_server();
     long int get_ntp_gmt_offset();
     long int get_ntp_daylight_offset();
-    const char *get_wifi_ssid();
-    const char *get_wifi_password();
+    String get_wifi_ssid();
+    String get_wifi_password();
 
 private:
     MODE m_mode = MODE::SETUP;
 
-    char *m_ntp_server = nullptr;
+    String m_ntp_server = "";
 
     long int m_ntp_gmt_offset = 0;
     long int m_ntp_daylight_offset = 0;
 
-    char *m_wifi_ssid = nullptr;
-    char *m_wifi_password = nullptr;
+    String m_wifi_ssid = "";
+    String m_wifi_password = "";
 
     std::vector<Sensor*> m_sensors;
 
@@ -42,7 +42,7 @@ private:
 
     MODE decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE default_value);
     long decode_json_key_as_long(JsonDocument &doc, const char *key, long int default_value);
-    char *decode_json_key_as_name(JsonDocument &doc, const char *key, const char *default_value);
+    String decode_json_key_as_name(JsonDocument &doc, const char *key, const char *default_value);
 };
 
 #endif

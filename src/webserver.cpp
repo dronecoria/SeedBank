@@ -76,7 +76,7 @@ void WebServer::init_access_point() {
 void WebServer::init_wifi_client() {
     int tries = 0;
     WiFi.mode(WIFI_STA);
-    WiFi.begin(this->m_config->get_wifi_ssid(), this->m_config->get_wifi_password());
+    WiFi.begin(this->m_config->get_wifi_ssid().c_str(), this->m_config->get_wifi_password().c_str());
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(1000);
