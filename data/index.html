@@ -10,30 +10,13 @@
 
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarController">
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                </a>
-              </div>
-
-              <div id="navbarController" class="navbar-menu">
-                <div class="navbar-start">
-                  <a class="navbar-item" href="/">
-                    Info
-                  </a>
-                  <a class="navbar-item" href="/setup.html">
-                    Setup
-                  </a>
-                </div>
-              </div>
+            <div class="navbar-menu">
+                <a class="navbar-item selected" href="/"> Info </a>
+                <a class="navbar-item" href="/setup.html"> Setup </a>
+            </div>
         </nav>
 
-
         <main>
-	        <h1>INFO</h1>
             <label>
                 Average temperature:
     	        <output id="avgTemp">--</output>

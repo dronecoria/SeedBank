@@ -1,9 +1,38 @@
-.navbar-item
-{
-    margin:0.5em;
-    padding:0.5em;
+body{
+    max-width: 900px;
+    margin: auto;
+    color: #333333;
 }
 
+nav {
+    position: sticky;
+    font-size: 1.2em;
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+nav a
+{
+    margin: 0.5em;
+    padding: 0.5em 0 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #222;
+}
+
+nav a.selected{
+    border-bottom: 5px solid #5da35b;
+    cursor: default;
+}
+
+nav a:hover{
+    border-bottom: 5px solid #5da35b;
+}
+
+fieldset{
+    margin: 1em 0;
+}
 fieldset label {
     display: block;
     margin: 0.1em;
@@ -40,10 +69,10 @@ button {
 }
 
 #log{
-padding: 2em;
-border: 1px dotted rgb(77, 77, 77);
-background-color: rgb(194, 194, 194);
-overflow: auto;
-margin: 0.5em;
-font-size: 1em;
+    padding: 2em;
+    border: 1px dotted rgb(77, 77, 77);
+    background-color: rgb(194, 194, 194);
+    overflow: auto;
+    margin: 0.5em;
+    font-size: 1em;
 }

@@ -10,42 +10,25 @@
 
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-                <a
-                    role="button"
-                    class="navbar-burger"
-                    aria-label="menu"
-                    aria-expanded="false"
-                    data-target="navbarController"
-                >
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
-            </div>
-
-            <div id="navbarController" class="navbar-menu">
-                <div class="navbar-start">
-                    <a class="navbar-item" href="/"> Info </a>
-                    <a class="navbar-item" href="/setup.html"> Setup </a>
-                </div>
+            <div class="navbar-menu">
+                <a class="navbar-item" href="/"> Info </a>
+                <a class="navbar-item selected" href="/setup.html"> Setup </a>
             </div>
         </nav>
 
         <main>
-            <h1>SETUP</h1>
             <form name="setup">
-                <label>
-                    Working mode:
-                    <select name="mode">
-                        <option value="setup">Setup</option>
-                        <option value="normal">Normal</option>
-                    </select>
-                </label>
                 <fieldset>
-                    <legend>Wifi settings:</legend>
+                    <legend>Wifi</legend>
                     <label>
-                        SSID:
+                        Working mode
+                        <select name="mode">
+                            <option value="setup">Setup</option>
+                            <option value="normal">Normal</option>
+                        </select>
+                    </label>
+                    <label>
+                        SSID
                         <input
                             name="wifi_ssid"
                             type="text"
@@ -63,9 +46,9 @@
                     </label>
                 </fieldset>
                 <fieldset>
-                    <legend>Time:</legend>
+                    <legend>Time</legend>
                     <label>
-                        NTP SERVER:
+                        NTP server
                         <input
                             name="ntp_server"
                             type="text"
@@ -74,7 +57,7 @@
                         />
                     </label>
                     <label>
-                        NTP GMT OFFSET:
+                        NTP gmt offset
                         <input
                             name="ntp_gmt_offset"
                             type="text"
@@ -91,13 +74,13 @@
                     <template>
                         <div>
                             <label class="inline">
-                                <select name="type" data-sensor="">
-                                    <option>HDC2080</option>
-                                    <option>BMP280</option>
+                                <select name="type" data-sensor="" required>
+                                    <option value="hdc2080">HDC2080</option>
+                                    <option value="bmp280">BMP280</option>
                                 </select>
                             </label>
                             <label class="inline">
-                                <input name="value" type="number" data-sensor="">
+                                <input placeholder="pin or address" name="value" type="number" data-sensor="" required>
                             </label>
                             <button type="button" class="mini inline del_sensor">-</button>
                         </div>
@@ -105,7 +88,58 @@
                 </fieldset>
                 <fieldset id="actuators">
                     <legend>Actuators</legend>
-
+                        <div>
+                            <output class="name">Hot</output>
+                            <label class="inline">
+                                <select name="type" required data-actuator="hot">
+                                    <option value="none">none</option>
+                                    <option value="relay">relay</option>
+                                    <option value="pwm">pwm</option>
+                                </select>
+                            </label>
+                            <label class="inline">
+                                <input placeholder="pin or address" name="value" type="number" required data-actuator="hot">
+                            </label>
+                        </div>
+                        <div>
+                            <output class="name">Cold</output>
+                            <label class="inline">
+                                <select name="type" required data-actuator="cold">
+                                    <option value="none">none</option>
+                                    <option value="relay">relay</option>
+                                    <option value="pwm">pwm</option>
+                                </select>
+                            </label>
+                            <label class="inline">
+                                <input placeholder="pin or address" name="value" type="number" required data-actuator="cold">
+                            </label>
+                        </div>
+                        <div>
+                            <output class="name">Fan</output>
+                            <label class="inline">
+                                <select name="type" required data-actuator="fan">
+                                    <option value="none">none</option>
+                                    <option value="relay">relay</option>
+                                    <option value="pwm">pwm</option>
+                                </select>
+                            </label>
+                            <label class="inline">
+                                <input placeholder="pin or address" name="value" type="number" required  data-actuator="fan">
+                            </label>
+                        </div>
+                        <div>
+                            <output class="name">Light</output>
+                            <label class="inline">
+                                <select name="type" required data-actuator="light">
+                                    <option value="none">none</option>
+                                    <option value="relay">relay</option>
+                                    <option value="pwm">pwm</option>
+                                </select>
+                            </label>
+                            <label class="inline">
+                                <input placeholder="pin or address" name="value" type="number" required data-actuator="light">
+                            </label>
+                        </div>
                 </fieldset>
                 <button name="save" type="submit">SAVE</button>
             </form>

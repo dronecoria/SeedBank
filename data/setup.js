@@ -8,10 +8,10 @@ function ready(fn) {
 
 let indexSensor = 0;
 
-ready( async function () {
+ready(async () => {
 
     const response = await fetch("/config.json");
-    if(!response.ok){
+    if (!response.ok) {
         alert("config.json not found");
     }
     let configJson = await response.json();
@@ -22,7 +22,7 @@ ready( async function () {
     const formSetup = document.querySelector("form[name=setup]");
 
     const addSensorButton = document.querySelector("#add_sensor");
-    addSensorButton.addEventListener("click",function(event){
+    addSensorButton.addEventListener("click", (event) => {
         addSensor();
     });
 
@@ -32,14 +32,25 @@ ready( async function () {
     for (const key in configJson) {
         if (Object.hasOwnProperty.call(configJson, key)) {
             const value = configJson[key];
-            if(formSetup[key] !== undefined){
-                if(key == "sensors"){
+            if (formSetup[key] !== undefined) {
+                if (key === "sensors") {
                     let index = 0;
                     configJson[key].forEach(sensor => {
-                        addSensor(sensor.type,sensor.value);
-
+                        addSensor(sensor.type, sensor.value);
                     });
-                }else{
+                } else if (key === "hot") {
+                    formSetup.querySelector("select[data-actuator=hot]").value = configJson[key].type;
+                    formSetup.querySelector("input[data-actuator=hot]").value = configJson[key].value;
+                } else if (key === "cold") {
+                    formSetup.querySelector("select[data-actuator=cold]").value = configJson[key].type;
+                    formSetup.querySelector("input[data-actuator=cold]").value = configJson[key].value;
+                } else if (key === "fan") {
+                    formSetup.querySelector("select[data-actuator=fan]").value = configJson[key].type;
+                    formSetup.querySelector("input[data-actuator=fan]").value = configJson[key].value;
+                }else if (key === "light") {
+                    formSetup.querySelector("select[data-actuator=light]").value = configJson[key].type;
+                    formSetup.querySelector("input[data-actuator=light]").value = configJson[key].value;
+                } else {
                     formSetup[key].value = configJson[key];
                 }
             }
@@ -48,22 +59,25 @@ ready( async function () {
 
 
 
-    formSetup.addEventListener("submit",async function (event) {
+
+    formSetup.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         let data = {
             "sensors": [],
-            "actuators": []
         };
         const inputs = ['input', 'select'];//, 'button', 'textarea'];
         for (const key in formSetup) {
             if (Object.hasOwnProperty.call(formSetup, key)) {
                 const el = formSetup[key];
-                if (el.tagName != undefined && inputs.indexOf(el.tagName.toLowerCase()) !== -1){
-                    if(el.dataset.sensor){
+                if (el.tagName != undefined && inputs.indexOf(el.tagName.toLowerCase()) !== -1) {
+                    if (el.dataset.sensor) {
                         if (data["sensors"][el.dataset.sensor] === undefined) data["sensors"][el.dataset.sensor] = {};
                         data["sensors"][el.dataset.sensor][el.name] = el.value;
-                    }else{
+                    } else if (el.dataset.actuator) {
+                        if (data[el.dataset.actuator] === undefined) data[el.dataset.actuator] = {};
+                        data[el.dataset.actuator][el.name] = el.value;
+                    } else {
                         data[el.name] = el.value;
                     }
 
@@ -92,7 +106,7 @@ ready( async function () {
     setInterval(get_time, 1 * 1000);
 });
 
-async function get_time(){
+async function get_time() {
     const response = await fetch("/get_time");
     let time = await response.text();
     const output = document.querySelector("#time");
@@ -100,7 +114,7 @@ async function get_time(){
 }
 
 
-function addSensor(type="", value="") {
+function addSensor(type = "", value = "") {
     const formSetup = document.querySelector("form[name=setup]");
     const templateSensor = document.querySelector("#sensors template");
     const clone = document.importNode(templateSensor.content, true);
@@ -112,7 +126,7 @@ function addSensor(type="", value="") {
     select.value = type;
     input.value = value;
     const delButton = clone.querySelector(".del_sensor");
-    delButton.addEventListener("click", function (event) {
+    delButton.addEventListener("click", (event) => {
         event.target.parentNode.remove();
     });
     formSetup["sensors"].appendChild(clone);
