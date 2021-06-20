@@ -7,15 +7,37 @@ Sensor::Sensor() {}
 // Sensor HDC2080: Texas Instruments, i2C interfaz (0x40, 0x41), +/- 0.2 ºC
 // --------------------------------------------------------------------------
 Sensor_HDC2080::Sensor_HDC2080(int address) {
-    // TODO
+    this->m_type = SENSOR_TYPE::HDC2080;
+    this->m_pin = address;
+    this->m_sensor = new HDC2080(this->m_pin);
+    this->m_sensor->begin();
+    this->m_sensor->reset();
+    this->m_sensor->setHighTemp(48);
+    this->m_sensor->setLowTemp(2);
+    this->m_sensor->setHighHumidity(95);
+    this->m_sensor->setLowHumidity(10);
+    this->m_sensor->setMeasurementMode(TEMP_AND_HUMID);
+    this->m_sensor->setRate(ONE_HZ);
+    this->m_sensor->setTempRes(FOURTEEN_BIT);
+    this->m_sensor->setHumidRes(FOURTEEN_BIT);
+    this->m_sensor->triggerMeasurement();
+    // if (!this) {
+    //     Serial.print(F("Could not find a BMP280 sensor at address "));
+    //     Serial.println(address);
+    // }
 }
 
 Sensor_HDC2080::~Sensor_HDC2080() {
-    // TODO
+    if (this->m_sensor != nullptr) {
+        delete this->m_sensor;
+        this->m_sensor = nullptr;
+    }
 }
 
 float Sensor_HDC2080::get_value() {
-    // TODO
+    if (this->m_sensor != nullptr) {
+        return this->m_sensor->readTemp();
+    }
     return 0.0;
 }
 

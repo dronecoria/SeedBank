@@ -29,7 +29,7 @@ public:
     float get_value(void);
 
 private:
-    HDC2080 *m_sensor;
+    HDC2080 *m_sensor = nullptr;
 };
 
 // --------------------------------------------------------------------------
@@ -42,7 +42,7 @@ public:
     float get_value(void);
 
 private:
-    Adafruit_BMP280 *m_sensor;
+    Adafruit_BMP280 *m_sensor = nullptr;
 };
 
 // --------------------------------------------------------------------------
@@ -64,7 +64,7 @@ public:
 
 private:
     unsigned long m_last_interrupt_time = 0;
-    void (*callback)(Sensor_BUTTON *button);
+    void (*callback)(Sensor_BUTTON *button) = nullptr;
 };
 
 // --------------------------------------------------------------------------
