@@ -57,9 +57,6 @@ ready(async () => {
         }
     }
 
-
-
-
     formSetup.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -73,18 +70,19 @@ ready(async () => {
                 if (el.tagName != undefined && inputs.indexOf(el.tagName.toLowerCase()) !== -1) {
                     if (el.dataset.sensor) {
                         if (data["sensors"][el.dataset.sensor] === undefined) data["sensors"][el.dataset.sensor] = {};
-                        data["sensors"][el.dataset.sensor][el.name] = el.value;
+                        data["sensors"][el.dataset.sensor][el.name] = getValueInput(el);
+
                     } else if (el.dataset.actuator) {
                         if (data[el.dataset.actuator] === undefined) data[el.dataset.actuator] = {};
-                        data[el.dataset.actuator][el.name] = el.value;
+                        data[el.dataset.actuator][el.name] = getValueInput(el);
                     } else {
-                        data[el.name] = el.value;
+                        data[el.name] = getValueInput(el);
                     }
 
                 }
             }
         }
-        console.log(data);
+
         const options = {
             method: "POST",
             headers: {
@@ -113,6 +111,12 @@ async function get_time() {
     output.innerHTML = time;
 }
 
+function getValueInput(input) {
+    if (input.type == "number") {
+        return +input.value;
+    }
+    return input.value;
+}
 
 function addSensor(type = "", value = "") {
     const formSetup = document.querySelector("form[name=setup]");
