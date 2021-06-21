@@ -57,14 +57,14 @@ void Config::read() {
     this->m_wifi_password = this->decode_json_key_as_name(doc, "wifi_password", "");
 
     for (JsonObject repo : doc["sensors"].as<JsonArray>()) {
-        if (repo["type"] == "DS18B20") {
-            this->sensors.push_back(new Sensor_DS18B20((int)repo["value"]));
+        if (strcmp(repo["type"].as<const char*>(), "DS18B20") == 0) {
+            this->sensors.push_back(new Sensor_DS18B20(repo["value"].as<int>()));
         }
-        if (repo["type"] == "HDC2080") {
-            this->sensors.push_back(new Sensor_HDC2080((int)repo["value"]));
+        if (strcmp(repo["type"].as<const char*>(), "HDC2080") == 0) {
+            this->sensors.push_back(new Sensor_HDC2080(repo["value"].as<int>()));
         }
-        else if (repo["type"] == "BMP280") {
-            this->sensors.push_back(new Sensor_BMP280((int)repo["value"]));
+        else if (strcmp(repo["type"].as<const char*>(), "BMP280") == 0) {
+            this->sensors.push_back(new Sensor_BMP280(repo["value"].as<int>()));
         }
     }
 }
@@ -95,7 +95,7 @@ String Config::get_wifi_password() {
 
 MODE Config::decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE default_value) {
     if (doc.containsKey(key) && doc[key].is<const char *>()) {
-        if (strcmp(doc[key], "setup") == 0) {
+        if (strcmp(doc[key].as<const char*>(), "setup") == 0) {
             return MODE::SETUP;
         }
         else {
@@ -108,17 +108,17 @@ MODE Config::decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE de
 long int Config::decode_json_key_as_long(JsonDocument &doc, const char *key, long int default_value) {
     long value = default_value;
     if (doc.containsKey(key) && doc[key].is<long int>()) {
-        value = (long int) doc[key];
+        value = doc[key].as<long int>();
     }
     return value;
 }
 
 String Config::decode_json_key_as_name(JsonDocument &doc, const char *key, const char* default_value) {
     if (doc.containsKey(key) && doc[key].is<const char *>()) {
-        return const_cast<char *>(doc[key].as<const char *>());
+        return doc[key].as<const char *>();
     }
     if (strcmp(default_value, "") != 0) {
-        return const_cast<char *>(default_value);
+        return default_value;
     }
     return "";
 }
