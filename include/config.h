@@ -4,10 +4,12 @@
 #include <ArduinoJson.h>
 #include "sensor.h"
 #include "actuator.h"
+#include "timetable.h"
 
 #define CONFIG_FILENAME "/config.json"
 
 enum class MODE { SETUP = 0, NORMAL };
+
 
 class Config {
 public:
@@ -22,7 +24,11 @@ public:
     String get_wifi_ssid();
     String get_wifi_password();
 
+    float get_temperature_reference();
+
     std::vector<Sensor*> sensors;
+    std::vector<Timetable*> schedule;
+
     Sensor_DOOR *door = nullptr;
     Sensor_BUTTON *button = nullptr;
 

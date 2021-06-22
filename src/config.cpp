@@ -67,6 +67,10 @@ void Config::read() {
             this->sensors.push_back(new Sensor_BMP280(repo["value"].as<int>()));
         }
     }
+
+    for (JsonObject repo : doc["schedule"].as<JsonArray>()) {
+        this->schedule.push_back(new Timetable(repo["start"].as<const char*>(), repo["end"].as<const char*>(), repo["value"].as<float>()));
+    }
 }
 
 MODE Config::get_mode() {
@@ -91,6 +95,17 @@ String Config::get_wifi_ssid() {
 
 String Config::get_wifi_password() {
     return this->m_wifi_password;
+}
+
+float Config::get_temperature_reference(){
+    for (auto timetable : this->schedule)
+    {
+        if(timetable->is_in_interval()){
+            return timetable->get_value();
+        }
+    }
+    //TODO send alert, error in schedule
+    return TEMP_ERROR_READING;
 }
 
 MODE Config::decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE default_value) {

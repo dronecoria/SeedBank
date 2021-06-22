@@ -7,6 +7,7 @@ function ready(fn) {
 }
 
 let indexSensor = 0;
+let indexTimetable = 0;
 
 ready(async () => {
 
@@ -26,6 +27,10 @@ ready(async () => {
         addSensor();
     });
 
+    const addTimetableButton = document.querySelector("#add_timetable");
+    addTimetableButton.addEventListener("click", (event) => {
+        addTimetable();
+    });
 
 
     //populate form
@@ -34,9 +39,12 @@ ready(async () => {
             const value = configJson[key];
             if (formSetup[key] !== undefined) {
                 if (key === "sensors") {
-                    let index = 0;
                     configJson[key].forEach(sensor => {
                         addSensor(sensor.type, sensor.value);
+                    });
+                } else if (key === "schedule") {
+                    configJson[key].forEach(timetable => {
+                        addTimetable(timetable.start, timetable.end,timetable.value);
                     });
                 } else if (key === "hot") {
                     formSetup.querySelector("select[data-actuator=hot]").value = configJson[key].type;
@@ -62,6 +70,7 @@ ready(async () => {
 
         let data = {
             "sensors": [],
+            "schedule": []
         };
         const inputs = ['input', 'select'];//, 'button', 'textarea'];
         for (const key in formSetup) {
@@ -75,12 +84,56 @@ ready(async () => {
                     } else if (el.dataset.actuator) {
                         if (data[el.dataset.actuator] === undefined) data[el.dataset.actuator] = {};
                         data[el.dataset.actuator][el.name] = getValueInput(el);
+
+                    } else if (el.dataset.timetable) {
+                        if (data["schedule"][el.dataset.timetable] === undefined){
+                            data["schedule"][el.dataset.timetable] = {};
+                        }
+
+                        data["schedule"][el.dataset.timetable][el.name] = getValueInput(el);
+
                     } else {
                         data[el.name] = getValueInput(el);
                     }
 
                 }
             }
+        }
+        // eliminate empty elements in array
+        data["schedule"] = data["schedule"].filter(val => val);
+        data["sensors"] =  data["sensors"].filter(val => val);
+
+        //check schedule is correct, no gaps or overlaps
+        //  1.- init = 00:00;
+        //  2.- find init
+        //  3.- check end > start  --> error
+        //  4.- end is new init
+        //  5.- repeat from 2 until end = 00:00
+        //  6.- if steps != count(schedule)  --> error
+        let checking = "00:00";
+        let timetable = null;
+        let count = 0;
+        do {
+            timetable = null;
+            data["schedule"].forEach(t => {
+                if (t.start == checking){
+                    timetable = t;
+                    count++;
+                }
+            });
+            if(timetable == null){
+                errorInSchedule("Gaps in schedule");
+                return;
+            }
+            if (toMinutes(timetable.start,false) > toMinutes(timetable.end,true) ){
+                errorInSchedule("timetravel");
+                return;
+            }
+            checking = timetable.end;
+        } while (timetable.end != "00:00");
+        if (Object.keys(data["schedule"]).length != count ){
+            errorInSchedule("Overlaps in schedule");
+            return;
         }
 
         const options = {
@@ -103,6 +156,18 @@ ready(async () => {
     get_time();
     setInterval(get_time, 1 * 1000);
 });
+
+function toMinutes(hour, isEnd)
+{
+    if(isEnd && hour == "00:00") hour = "24:00";
+    let h = hour.split(":");
+    return (h[0]*60) + (+h[1]);
+}
+
+function errorInSchedule(message)
+{
+    alert(message);
+}
 
 async function get_time() {
     const response = await fetch("/get_time");
@@ -135,4 +200,28 @@ function addSensor(type = "", value = "") {
     });
     formSetup["sensors"].appendChild(clone);
     indexSensor++;
+}
+
+function addTimetable(start = "", end = "", value = "") {
+    const formSetup = document.querySelector("form[name=setup]");
+    const templateTimetable = document.querySelector("#schedule template");
+    const clone = document.importNode(templateTimetable.content, true);
+    const input_start = clone.querySelector("input[name=start]");
+    const input_end = clone.querySelector("input[name=end]");
+    const input_value = clone.querySelector("input[name=value]");
+
+    input_start.dataset.timetable = indexTimetable;
+    input_end.dataset.timetable = indexTimetable;
+    input_value.dataset.timetable = indexTimetable;
+
+    input_start.value = start;
+    input_end.value = end;
+    input_value.value = value;
+
+    const delButton = clone.querySelector(".del_timetable");
+    delButton.addEventListener("click", (event) => {
+        event.target.parentNode.remove();
+    });
+    formSetup["schedule"].appendChild(clone);
+    indexTimetable++;
 }

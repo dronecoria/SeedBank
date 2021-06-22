@@ -26,11 +26,17 @@ Decisor::Decisor(Config *config, State *state) {
 
 void Decisor::loop() {
     float t = this->m_state->get_avg_temperature();
+    float t_reference = m_config->get_temperature_reference();
+
 
     Serial.print("Decisor::loop");
     Serial.print(" - Avg Temp: ");
     Serial.print(t);
     Serial.print(" - All: ");
     this->m_state->print_all_temperatures();
+
+    Serial.print("   REF: ");
+    Serial.print(t_reference);
+
     Serial.println("");
 }

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <meta charset="utf-8">
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Configurator</title>
         <link rel="stylesheet" href="/styles.css" />
     </head>
@@ -70,7 +70,12 @@
                     <button type="button">Sync</button>
                 </fieldset>
                 <fieldset id="sensors">
-                    <legend>Sensors <button id="add_sensor" type="button" class="mini">+</button></legend>
+                    <legend>
+                        Sensors
+                        <button id="add_sensor" type="button" class="mini">
+                            +
+                        </button>
+                    </legend>
                     <template>
                         <div>
                             <label class="inline">
@@ -81,67 +86,148 @@
                                 </select>
                             </label>
                             <label class="inline">
-                                <input placeholder="pin or address" name="value" type="number" data-sensor="" required>
+                                <input
+                                    placeholder="pin or address"
+                                    name="value"
+                                    type="number"
+                                    data-sensor=""
+                                    required
+                                />
                             </label>
-                            <button type="button" class="mini inline del_sensor">-</button>
+                            <button
+                                type="button"
+                                class="mini inline del_sensor"
+                            >
+                                -
+                            </button>
                         </div>
                     </template>
                 </fieldset>
-                <fieldset id="actuators">
-                    <legend>Actuators</legend>
+
+                    <fieldset id="hot" class="inline">
+                        <legend>Hot</legend>
+                        <label class="inline">
+                            <select name="type" required data-actuator="hot">
+                                <option value="none">none</option>
+                                <option value="relay">relay</option>
+                                <option value="pwm">pwm</option>
+                            </select>
+                        </label>
+                        <label class="inline">
+                            <input
+                                placeholder="pin or address"
+                                name="value"
+                                type="number"
+                                required
+                                data-actuator="hot"
+                            />
+                        </label>
+                    </fieldset>
+                    <fieldset id="cold" class="inline">
+                        <legend>Cold</legend>
+                        <label class="inline">
+                            <select name="type" required data-actuator="cold">
+                                <option value="none">none</option>
+                                <option value="relay">relay</option>
+                                <option value="pwm">pwm</option>
+                            </select>
+                        </label>
+                        <label class="inline">
+                            <input
+                                placeholder="pin or address"
+                                name="value"
+                                type="number"
+                                required
+                                data-actuator="cold"
+                            />
+                        </label>
+                    </fieldset>
+                    <fieldset id="fan" class="inline">
+                        <legend>Fan</legend>
+                        <label class="inline">
+                            <select name="type" required data-actuator="fan">
+                                <option value="none">none</option>
+                                <option value="relay">relay</option>
+                                <option value="pwm">pwm</option>
+                            </select>
+                        </label>
+                        <label class="inline">
+                            <input
+                                placeholder="pin or address"
+                                name="value"
+                                type="number"
+                                required
+                                data-actuator="fan"
+                            />
+                        </label>
+                    </fieldset>
+                    <fieldset id="light" class="inline">
+                        <legend>Light</legend>
+                        <label class="inline">
+                            <select name="type" required data-actuator="light">
+                                <option value="none">none</option>
+                                <option value="relay">relay</option>
+                                <option value="pwm">pwm</option>
+                            </select>
+                        </label>
+                        <label class="inline">
+                            <input
+                                placeholder="pin or address"
+                                name="value"
+                                type="number"
+                                required
+                                data-actuator="light"
+                            />
+                        </label>
+                    </fieldset>
+
+
+                <fieldset id="schedule">
+                    <legend>
+                        Schedule
+                        <button id="add_timetable" type="button" class="mini">
+                            +
+                        </button>
+                    </legend>
+                    <template>
                         <div>
-                            <output class="name">Hot</output>
                             <label class="inline">
-                                <select name="type" required data-actuator="hot">
-                                    <option value="none">none</option>
-                                    <option value="relay">relay</option>
-                                    <option value="pwm">pwm</option>
-                                </select>
+                                Start
+                                <input
+                                    type="time"
+                                    name="start"
+                                    data-timetable=""
+                                    required
+                                />
                             </label>
                             <label class="inline">
-                                <input placeholder="pin or address" name="value" type="number" required data-actuator="hot">
+                                End
+                                <input
+                                    type="time"
+                                    name="end"
+                                    data-timetable=""
+                                    required
+                                />
                             </label>
+                            <label class="inline">
+                                <input
+                                    placeholder="Temp ref."
+                                    name="value"
+                                    type="number"
+                                    data-timetable=""
+                                    required
+                                />
+                            </label>
+                            <button
+                                type="button"
+                                class="mini inline del_timetable"
+                            >
+                                -
+                            </button>
                         </div>
-                        <div>
-                            <output class="name">Cold</output>
-                            <label class="inline">
-                                <select name="type" required data-actuator="cold">
-                                    <option value="none">none</option>
-                                    <option value="relay">relay</option>
-                                    <option value="pwm">pwm</option>
-                                </select>
-                            </label>
-                            <label class="inline">
-                                <input placeholder="pin or address" name="value" type="number" required data-actuator="cold">
-                            </label>
-                        </div>
-                        <div>
-                            <output class="name">Fan</output>
-                            <label class="inline">
-                                <select name="type" required data-actuator="fan">
-                                    <option value="none">none</option>
-                                    <option value="relay">relay</option>
-                                    <option value="pwm">pwm</option>
-                                </select>
-                            </label>
-                            <label class="inline">
-                                <input placeholder="pin or address" name="value" type="number" required  data-actuator="fan">
-                            </label>
-                        </div>
-                        <div>
-                            <output class="name">Light</output>
-                            <label class="inline">
-                                <select name="type" required data-actuator="light">
-                                    <option value="none">none</option>
-                                    <option value="relay">relay</option>
-                                    <option value="pwm">pwm</option>
-                                </select>
-                            </label>
-                            <label class="inline">
-                                <input placeholder="pin or address" name="value" type="number" required data-actuator="light">
-                            </label>
-                        </div>
+                    </template>
                 </fieldset>
+
                 <button name="save" type="submit">SAVE</button>
             </form>
         </main>
