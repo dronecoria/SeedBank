@@ -104,13 +104,14 @@
                     </template>
                 </fieldset>
 
-                    <fieldset id="hot" class="inline">
-                        <legend>Hot</legend>
+                    <fieldset id="heat" class="inline">
+                        <legend>heat</legend>
                         <label class="inline">
-                            <select name="type" required data-actuator="hot">
-                                <option value="none">none</option>
-                                <option value="relay">relay</option>
-                                <option value="pwm">pwm</option>
+                            <select name="type" required data-actuator="heat">
+                                <option value="NONE">NONE</option>
+                                <option value="RELAY">RELAY</option>
+                                <option value="SOLID">SOLID</option>
+                                <option value="PWM">PWM</option>
                             </select>
                         </label>
                         <label class="inline">
@@ -119,7 +120,7 @@
                                 name="value"
                                 type="number"
                                 required
-                                data-actuator="hot"
+                                data-actuator="heat"
                             />
                         </label>
                     </fieldset>
@@ -127,9 +128,10 @@
                         <legend>Cold</legend>
                         <label class="inline">
                             <select name="type" required data-actuator="cold">
-                                <option value="none">none</option>
-                                <option value="relay">relay</option>
-                                <option value="pwm">pwm</option>
+                                <option value="NONE">NONE</option>
+                                <option value="RELAY">RELAY</option>
+                                <option value="SOLID">SOLID</option>
+                                <option value="PWM">PWM</option>
                             </select>
                         </label>
                         <label class="inline">
@@ -146,9 +148,10 @@
                         <legend>Fan</legend>
                         <label class="inline">
                             <select name="type" required data-actuator="fan">
-                                <option value="none">none</option>
-                                <option value="relay">relay</option>
-                                <option value="pwm">pwm</option>
+                                <option value="NONE">NONE</option>
+                                <option value="RELAY">RELAY</option>
+                                <option value="SOLID">SOLID</option>
+                                <option value="PWM">PWM</option>
                             </select>
                         </label>
                         <label class="inline">
@@ -165,9 +168,10 @@
                         <legend>Light</legend>
                         <label class="inline">
                             <select name="type" required data-actuator="light">
-                                <option value="none">none</option>
-                                <option value="relay">relay</option>
-                                <option value="pwm">pwm</option>
+                                <option value="NONE">NONE</option>
+                                <option value="RELAY">RELAY</option>
+                                <option value="SOLID">SOLID</option>
+                                <option value="PWM">PWM</option>
                             </select>
                         </label>
                         <label class="inline">

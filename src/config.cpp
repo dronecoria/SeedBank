@@ -68,9 +68,29 @@ void Config::read() {
         }
     }
 
+    this->cold  = this->set_actuator(doc["cold"]["type"].as<const char*>(),doc["cold"]["value"].as<int>());
+    this->heat  = this->set_actuator(doc["heat"]["type"].as<const char*>(),doc["heat"]["value"].as<int>());
+    this->fan   = this->set_actuator(doc["fan"]["type"].as<const char*>(),doc["fan"]["value"].as<int>());
+    this->light = this->set_actuator(doc["light"]["type"].as<const char*>(),doc["light"]["value"].as<int>());
+
     for (JsonObject repo : doc["schedule"].as<JsonArray>()) {
         this->schedule.push_back(new Timetable(repo["start"].as<const char*>(), repo["end"].as<const char*>(), repo["value"].as<float>()));
     }
+}
+
+Actuator* Config::set_actuator(String type, int value)
+{
+    if(type == "RELAY"){
+        return new Relay(value);
+    }
+    else if (type == "SOLID") {
+        return new Solid(value);
+    }
+    else if (type == "PWM") {
+        return new Pwm(value);
+    }
+
+    return nullptr;
 }
 
 MODE Config::get_mode() {

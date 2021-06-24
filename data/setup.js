@@ -46,9 +46,9 @@ ready(async () => {
                     configJson[key].forEach(timetable => {
                         addTimetable(timetable.start, timetable.end,timetable.value);
                     });
-                } else if (key === "hot") {
-                    formSetup.querySelector("select[data-actuator=hot]").value = configJson[key].type;
-                    formSetup.querySelector("input[data-actuator=hot]").value = configJson[key].value;
+                } else if (key === "heat") {
+                    formSetup.querySelector("select[data-actuator=heat]").value = configJson[key].type;
+                    formSetup.querySelector("input[data-actuator=heat]").value = configJson[key].value;
                 } else if (key === "cold") {
                     formSetup.querySelector("select[data-actuator=cold]").value = configJson[key].type;
                     formSetup.querySelector("input[data-actuator=cold]").value = configJson[key].value;

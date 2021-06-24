@@ -32,10 +32,10 @@ public:
     Sensor_DOOR *door = nullptr;
     Sensor_BUTTON *button = nullptr;
 
-    Relay* cold = nullptr;
-    Relay* heat = nullptr;
-    Relay* fan = nullptr;
-    Relay* light = nullptr;
+    Actuator *cold = nullptr;
+    Actuator *heat = nullptr;
+    Actuator *fan = nullptr;
+    Actuator *light = nullptr;
 
 private:
     MODE m_mode = MODE::SETUP;
@@ -51,6 +51,8 @@ private:
     MODE decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE default_value);
     long decode_json_key_as_long(JsonDocument &doc, const char *key, long int default_value);
     String decode_json_key_as_name(JsonDocument &doc, const char *key, const char *default_value);
+
+    Actuator* set_actuator(String type, int value);
 };
 
 #endif

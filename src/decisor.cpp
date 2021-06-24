@@ -25,18 +25,51 @@ Decisor::Decisor(Config *config, State *state) {
 }
 
 void Decisor::loop() {
-    float t = this->m_state->get_avg_temperature();
+    float t_avg = this->m_state->get_avg_temperature();
     float t_reference = m_config->get_temperature_reference();
 
+    float t_diff = 0;
+    int num_sensors = 0;
+    for (auto s : this->m_config->sensors) {
+        float t = s->get_last_value();
+        t_diff += abs(t - t_avg);
+        num_sensors++;
+    }
+    //t_diff /= num_sensors;
 
     Serial.print("Decisor::loop");
     Serial.print(" - Avg Temp: ");
-    Serial.print(t);
+    Serial.print(t_avg);
     Serial.print(" - All: ");
     this->m_state->print_all_temperatures();
 
     Serial.print("   REF: ");
     Serial.print(t_reference);
 
+    Serial.print("   DIFF: ");
+    Serial.print(t_diff);
+
     Serial.println("");
+
+
+
+    //basic decissor
+    if(t_reference < t_avg){
+        if (this->m_config->cold != nullptr) {
+            this->m_config->cold->enable();
+        }
+    }
+    if (t_reference > t_avg) {
+        if (this->m_config->heat != nullptr) {
+            this->m_config->heat->enable();
+        }
+    }
+    //if(t_diff > 0.3f){
+        if (this->m_config->fan != nullptr) {
+            this->m_config->fan->set_value( t_diff );
+        }
+    //}
+    // if (this->m_config->light != nullptr) {
+    //     this->m_config->light->enable();
+    // }
 }
