@@ -38,7 +38,7 @@ void WebServer::loop() {
         this->init();
     } else {
         this->check_ntp();
-        this->send_data();
+        //this->send_data(); //TODO what data??
     }
 }
 
@@ -128,6 +128,12 @@ void WebServer::init_server() {
 }
 
 void WebServer::check_ntp() {
+    if(this->m_state->is_clock_set) return;
+
+    configTime( m_config->get_ntp_gmt_offset()      * 60 * 60,
+                m_config->get_ntp_daylight_offset() * 60 * 60,
+                m_config->get_ntp_server().c_str());
+    this->m_state->is_clock_set = true;
 }
 
 void WebServer::send_data() {
@@ -145,7 +151,7 @@ void WebServer::set_default_time() {
     struct timeval now = { .tv_sec = t };
     settimeofday(&now, NULL);
     // TODO: Set this variable on check_ntp
-    this->m_state->is_clock_set = true;
+    //this->m_state->is_clock_set = true;
 
 }
 
