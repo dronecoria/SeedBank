@@ -115,6 +115,10 @@ void WebServer::init_server() {
         request->send(200,"text/plain",get_time());
     });
 
+    this->m_webserver->on("/status.json", HTTP_GET, [&](AsyncWebServerRequest* request) {
+        request->send(200, "application/json", get_status());
+        });
+
     this->m_webserver->onNotFound([](AsyncWebServerRequest *request) {
         if (SPIFFS.exists(request->url())) {
             request->send(SPIFFS, request->url());
@@ -165,6 +169,64 @@ String get_time()
     return time_str;
 }
 
+String WebServer::get_status()
+{
+    StaticJsonDocument<2048> doc;
+
+    JsonObject root = doc.to<JsonObject>();
+    root["reference_temp"] = m_config->get_temperature_reference();
+    root["avg_temp"] = m_state->get_avg_temperature();
+
+    JsonArray sensors = root.createNestedArray("sensors");
+    for (auto sensor : m_config->sensors) {
+        JsonObject obj = sensors.createNestedObject();
+        obj["type"] = sensor->get_type();
+        obj["value"] = sensor->get_last_value();
+    }
+
+    JsonArray actuators = root.createNestedArray("actuators");
+    {
+        auto act = m_config->cold;
+        if (act != nullptr) {
+            JsonObject obj = actuators.createNestedObject();
+            obj["name"] = "cold";
+            obj["type"] = act->get_type();
+            obj["value"] = act->get_value();
+        }
+    }
+    {
+        auto act = m_config->heat;
+        if (act != nullptr) {
+            JsonObject obj = actuators.createNestedObject();
+            obj["name"] = "heat";
+            obj["type"] = act->get_type();
+            obj["value"] = act->get_value();
+        }
+    }
+    {
+        auto act = m_config->light;
+        if (act != nullptr) {
+            JsonObject obj = actuators.createNestedObject();
+            obj["name"] = "light";
+            obj["type"] = act->get_type();
+            obj["value"] = act->get_value();
+        }
+    }
+    {
+        auto act = m_config->fan;
+        if (act != nullptr) {
+            JsonObject obj = actuators.createNestedObject();
+            obj["name"] = "fan";
+            obj["type"] = act->get_type();
+            obj["value"] = act->get_value();
+        }
+    }
+
+    String json;
+    serializeJson(doc, json);
+
+    return json;
+}
 
 String GetBodyContent(uint8_t *data, size_t len)
 {

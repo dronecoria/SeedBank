@@ -10,7 +10,9 @@ public:
     virtual void disable();
 
     virtual void set_value(float value);
+    virtual float get_value();
 
+    String get_type();
     bool is_active();
 
 protected:
@@ -42,7 +44,7 @@ public:
     void enable();
     void disable();
     void set_value(float value) override;
-    float get_value();
+    float get_value() override;
 
 private:
     float m_value = 0.0f;

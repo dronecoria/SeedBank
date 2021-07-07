@@ -17,13 +17,45 @@
         </nav>
 
         <main>
-            <label>
-                Average temperature:
-    	        <output id="avgTemp">--</output>
-            </label>
+            <section id="others"></section>
+            <section id="sensors"></section>
+            <section id="actuators"></section>
+
         </main>
+        <div id="log"></div>
 
-
+        <template id="sensor">
+            <fieldset class="inline">
+                <legend class="type inline"></legend>
+                <label class="inline">
+                    Value
+                    <output class="value"></output>
+                </label>
+            </fieldset>
+        </template>
+        <template id="actuator">
+            <fieldset>
+                <legend class="name inline"></legend>
+                <label class="inline">
+                    Type
+                    <output class="type"></output>
+                </label>
+                <label class="inline">
+                    Value
+                    <output class="value"></output>
+                </label>
+                <button>TOOGLE</button>
+            </fieldset>
+        </template>
+        <template id="other">
+            <fieldset class="inline">
+                <legend class="name inline"></legend>
+                <label class="inline">
+                    Value
+                    <output class="value"></output>
+                </label>
+            </fieldset>
+        </template>
 
 	  <script type="text/javascript" src="/index.js"></script>
     </body>

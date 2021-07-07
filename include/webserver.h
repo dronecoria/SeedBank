@@ -28,6 +28,7 @@ private:
     void init_server();
     void send_data();
 
+    String get_status();
 };
 
 String get_time();

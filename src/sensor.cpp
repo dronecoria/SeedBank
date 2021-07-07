@@ -4,6 +4,29 @@
 Sensor::Sensor() {}
 float Sensor::get_last_value() { return this->m_last_value; }
 
+String Sensor::get_type(){
+    switch (m_type)
+    {
+    case SENSOR_TYPE::DHT22:
+        return "DHT22";
+    case SENSOR_TYPE::DS18B20:
+        return "DS18B20";
+    case SENSOR_TYPE::BMP280:
+        return "BMP280";
+    case SENSOR_TYPE::HDC2080:
+        return "HDC2080";
+    case SENSOR_TYPE::DUMMY:
+        return "DUMMY";
+    case SENSOR_TYPE::DOOR:
+        return "DOOR";
+    case SENSOR_TYPE::BUTTON:
+        return "BUTTON";
+
+    default:
+        return "unknow";
+    }
+
+}
 // --------------------------------------------------------------------------
 // Sensor DS18B20: Maxim, 1-Wire interfaz, +/- 0.5 ºC
 // --------------------------------------------------------------------------

@@ -27,6 +27,7 @@ public:
     Sensor();
     virtual float get_value();
     float get_last_value();
+    String get_type();
 
 protected:
     SENSOR_TYPE m_type = SENSOR_TYPE::NONE;

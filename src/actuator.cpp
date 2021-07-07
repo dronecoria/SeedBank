@@ -7,6 +7,26 @@ bool Actuator::is_active() {
     return m_is_active;
 }
 
+String Actuator::get_type() {
+    switch (m_type)
+    {
+        case ACTUATOR_TYPE::RELAY:
+            return "RELAY";
+        case ACTUATOR_TYPE::SOLID:
+            return "SOLID";
+        case ACTUATOR_TYPE::PWM:
+            return"PWM";
+
+        default:
+         return "unknow";
+    }
+
+}
+
+float Actuator::get_value(){
+    return static_cast<float>(this->is_active());
+}
+
 void Actuator::set_value(float value)
 {
     if(value > 0.01f){

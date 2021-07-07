@@ -32,13 +32,14 @@ nav a:hover{
 
 fieldset{
     margin: 1em 0;
+    padding: 1em;
 }
 fieldset label {
     display: block;
     margin: 0.1em;
 }
 .inline{
-    display: inline;
+    display: inline-block;
 }
 
 button.mini {
@@ -50,10 +51,16 @@ button.mini {
     font-weight: bold;
 }
 
-fieldset label input,fieldset label select {
+fieldset label input,fieldset label select ,fieldset label output{
     padding: 0.2em;
     margin: 0.3em;
     margin-left: 1em;
+}
+
+output {
+    border: 1px solid #c3c3c3;
+    padding: 0.8em !important;
+    border-radius: 5px;
 }
 
 fieldset legend {
