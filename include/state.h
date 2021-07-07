@@ -9,6 +9,7 @@ public:
     State(Config *config);
     bool is_clock_set = false;
 
+    void sensors_update();
     float get_avg_temperature();
     void print_all_temperatures();
 

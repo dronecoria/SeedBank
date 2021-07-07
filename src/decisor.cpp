@@ -25,6 +25,7 @@ Decisor::Decisor(Config *config, State *state) {
 }
 
 void Decisor::loop() {
+    this->m_state->sensors_update();
     float t_avg = this->m_state->get_avg_temperature();
     float t_reference = m_config->get_temperature_reference();
 
@@ -32,8 +33,10 @@ void Decisor::loop() {
     int num_sensors = 0;
     for (auto s : this->m_config->sensors) {
         float t = s->get_last_value();
-        t_diff += abs(t - t_avg);
-        num_sensors++;
+        if (t != TEMP_ERROR_READING){
+            t_diff += abs(t - t_avg);
+            num_sensors++;
+        }
     }
     //t_diff /= num_sensors;
 
@@ -66,7 +69,8 @@ void Decisor::loop() {
     }
     //if(t_diff > 0.3f){
         if (this->m_config->fan != nullptr) {
-            this->m_config->fan->set_value( t_diff );
+            //this->m_config->fan->set_value(t_diff);
+            this->m_config->fan->set_value(  0.9f);
         }
     //}
     // if (this->m_config->light != nullptr) {
