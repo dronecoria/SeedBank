@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "actuator.h"
 
 Actuator::Actuator() {}
@@ -75,8 +74,85 @@ void Solid::disable() {
     this->m_is_active = false;
 }
 
+
+
 /*
- *   PWM
+ *   PWM by software
+ */
+
+SoftPwm::SoftPwm(int pin) {
+    this->m_pin = pin;
+    this->m_type = ACTUATOR_TYPE::PWM;
+
+    pinMode(pin, OUTPUT);
+    m_pwmTickTime = 0;
+
+    xTaskCreate(
+        loop_softPWM_task,  // Task function.
+        "softPWM",          // String with name of task.
+        1000,              // Stack size in bytes.
+        (void*)this,        // Parameter passed as input of the task
+        1,                  // Priority of the task.
+        &this->m_task);     // Task handle.
+
+    this->disable();
+}
+
+void loop_softPWM_task(void* p_softPWM) {
+    SoftPwm* softPwm = (SoftPwm*)p_softPWM;
+    unsigned long currentMicros = micros();
+    unsigned long previousMicros = 0;
+
+    while (true) {
+        if(softPwm->is_active()){
+            currentMicros = millis();
+            softPwm->handlePWM(currentMicros - previousMicros);
+            previousMicros = currentMicros;
+        }
+        vTaskDelay((softPwm->frequency()) / portTICK_PERIOD_MS);
+    }
+}
+
+void SoftPwm::handlePWM(unsigned long deltatime) {
+
+    m_pwmTickTime += deltatime;
+
+    float step = min(1.0f, ((float)m_pwmTickTime / (float)interval_time));  // between 0 and 1
+
+    digitalWrite(m_pin, (step < m_value) );
+
+    if (m_pwmTickTime > interval_time) {
+        m_pwmTickTime -= interval_time;
+    }
+}
+
+void SoftPwm::set_value(float value)
+{
+    value = max(0.0f, min(100.0f, value));
+
+    m_value = value;
+    m_is_active = (value > 0.001f);
+}
+
+float SoftPwm::get_value()
+{
+    return m_value;
+}
+
+void SoftPwm::enable() {
+    m_value = 1;
+    m_is_active = true;
+}
+
+void SoftPwm::disable() {
+    m_value = 0;
+    m_is_active = false;
+}
+
+
+
+/*
+ *  REAL PWM
  */
 int number_pwm_used = 0;
 

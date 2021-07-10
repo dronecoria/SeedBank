@@ -87,7 +87,7 @@ Actuator* Config::set_actuator(String type, int value)
         return new Solid(value);
     }
     else if (type == "PWM") {
-        return new Pwm(value);
+        return new SoftPwm(value);
     }
 
     return nullptr;

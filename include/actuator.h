@@ -1,6 +1,8 @@
 #ifndef ACTUATOR_H
 #define ACTUATOR_H
 
+#include <Arduino.h>
+
 enum class ACTUATOR_TYPE { NONE, RELAY, SOLID, PWM };
 
 class Actuator {
@@ -37,12 +39,38 @@ public:
     void disable();
 };
 
+class SoftPwm : public Actuator {
+public:
+    SoftPwm(int pin);
+
+    void enable() override;
+    void disable() override;
+    void set_value(float value) override;
+    float get_value() override;
+
+    void handlePWM(unsigned long deltatime);
+    inline int frequency(){return interval_time/steps;};
+private:
+
+    TaskHandle_t m_task;
+   // float m_pwmValue;
+    //bool  m_pwmState;
+    int   m_pwmTickTime;
+
+    float m_value = 0.0f;
+
+    const int interval_time = 1000;
+    const int steps = 100;
+};
+void loop_softPWM_task(void* p_softPWM);
+
+
 class Pwm : public Actuator {
 public:
     Pwm(int pin);
 
-    void enable();
-    void disable();
+    void enable() override;
+    void disable() override;
     void set_value(float value) override;
     float get_value() override;
 

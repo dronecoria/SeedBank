@@ -4,7 +4,7 @@ void loop_decisor_task(void *p_decisor) {
     Decisor *decisor = (Decisor *) p_decisor;
     while(true) {
         decisor->loop();
-        delay(1000);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -29,14 +29,19 @@ void Decisor::loop() {
     float t_avg = this->m_state->get_avg_temperature();
     float t_reference = m_config->get_temperature_reference();
 
-    float t_diff = 0;
-    int num_sensors = 0;
+    // float t_diff = 0;
+    // int num_sensors = 0;
+    // for (auto s : this->m_config->sensors) {
+    //     float t = s->get_value();
+    //     if (t != TEMP_ERROR_READING){
+    //         t_diff += abs(t - t_avg);
+    //         num_sensors++;
+    //     }
+    // }
+    float t_max_diff = 0;
     for (auto s : this->m_config->sensors) {
-        float t = s->get_last_value();
-        if (t != TEMP_ERROR_READING){
-            t_diff += abs(t - t_avg);
-            num_sensors++;
-        }
+        float t = s->get_value();
+        t_max_diff = max(t_max_diff, abs(t - t_avg) );
     }
     //t_diff /= num_sensors;
 
@@ -49,8 +54,8 @@ void Decisor::loop() {
     Serial.print("   REF: ");
     Serial.print(t_reference);
 
-    Serial.print("   DIFF: ");
-    Serial.print(t_diff);
+    Serial.print("   MAX DIFF: ");
+    Serial.print(t_max_diff);
 
     Serial.println("");
 
@@ -67,13 +72,13 @@ void Decisor::loop() {
             this->m_config->heat->enable();
         }
     }
-    //if(t_diff > 0.3f){
+    if(t_max_diff > 0.25f){
         if (this->m_config->fan != nullptr) {
             //this->m_config->fan->set_value(t_diff);
-            this->m_config->fan->set_value(  0.9f);
+            this->m_config->fan->enable();
         }
-    //}
-    // if (this->m_config->light != nullptr) {
-    //     this->m_config->light->enable();
-    // }
+    }
+    if (this->m_config->light != nullptr) {
+        this->m_config->light->set_value(t_max_diff);
+    }
 }
