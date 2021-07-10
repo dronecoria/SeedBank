@@ -1,9 +1,9 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
+#include <Wire.h>
 #include <HDC2080.h>
 #include <Adafruit_BMP280.h>
-#include <Wire.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
@@ -25,8 +25,8 @@ enum class SENSOR_TYPE { NONE, DHT22, DS18B20, BMP280, HDC2080, DUMMY, DOOR, BUT
 class Sensor {
 public:
     Sensor();
-    virtual float get_value();
-    float get_last_value();
+    virtual void update();
+    float get_value();
     String get_type();
 
 protected:
@@ -42,7 +42,7 @@ class Sensor_DS18B20 : public Sensor {
 public:
     Sensor_DS18B20(int pin);
     ~Sensor_DS18B20();
-    float get_value(void);
+    void update(void);
     int get_count(void);
     float get_value_by_index(int index);
 
@@ -62,7 +62,7 @@ class Sensor_HDC2080 : public Sensor {
 public:
     Sensor_HDC2080(int address);
     ~Sensor_HDC2080();
-    float get_value(void);
+    void update(void);
 
 private:
     HDC2080 *m_sensor = nullptr;
@@ -75,7 +75,7 @@ class Sensor_BMP280 : public Sensor {
 public:
     Sensor_BMP280(int address);
     ~Sensor_BMP280();
-    float get_value(void);
+    void update(void);
 
 private:
     Adafruit_BMP280 *m_sensor = nullptr;
@@ -87,7 +87,7 @@ private:
 class Sensor_DOOR : public Sensor {
 public:
     Sensor_DOOR(int pin);
-    float get_value(void);
+    void update(void);
 };
 
 // --------------------------------------------------------------------------
@@ -96,7 +96,7 @@ public:
 class Sensor_BUTTON : public Sensor {
 public:
     Sensor_BUTTON(int pin, void (*callback)(Sensor_BUTTON *button));
-    float get_value(void);
+    void update(void);
 
 private:
     unsigned long m_last_interrupt_time = 0;
@@ -109,7 +109,7 @@ private:
 class Sensor_DUMMY : public Sensor {
 public:
     Sensor_DUMMY(float min, float max, float max_variation);
-    float get_value(void);
+    void update(void);
 
 private:
     float m_min;

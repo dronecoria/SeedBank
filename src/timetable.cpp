@@ -1,6 +1,4 @@
 
-#include <Arduino.h>
-#include <sys/time.h>
 #include "timetable.h"
 
 
@@ -15,7 +13,7 @@ Timetable::Timetable(String start, String end, float value) {
 float Timetable::get_value() { return m_value; };
 
 bool Timetable::is_in_interval() {
-    struct tm   time_info;
+    tm time_info;
     getLocalTime(&time_info);
     int minutes_now = time_info.tm_hour * 60 + time_info.tm_min;
     if (m_start < minutes_now && m_end > minutes_now) {

@@ -2,7 +2,7 @@
 
 
 Sensor::Sensor() {}
-float Sensor::get_last_value() { return this->m_last_value; }
+float Sensor::get_value() { return this->m_last_value; }
 
 String Sensor::get_type(){
     switch (m_type)
@@ -69,7 +69,7 @@ float Sensor_DS18B20::m_get_value_by_index(int index) {
     return this->m_sensors->getTempC(this->m_addresses[index]);
 }
 
-float Sensor_DS18B20::get_value(void) {
+void Sensor_DS18B20::update(void) {
     int count = this->m_count;
     float temperatures = 0.0;
 
@@ -78,10 +78,9 @@ float Sensor_DS18B20::get_value(void) {
         temperatures += this->m_get_value_by_index(i);
     }
     if (count > 0) {
-        this->m_last_value = temperatures / count;
-        return this->m_last_value;
+        this->m_last_value = temperatures / count;        
     }
-    return TEMP_ERROR_READING;
+    this->m_last_value = TEMP_ERROR_READING;
 }
 
 // --------------------------------------------------------------------------
@@ -111,16 +110,15 @@ Sensor_HDC2080::~Sensor_HDC2080() {
     }
 }
 
-float Sensor_HDC2080::get_value() {
+void Sensor_HDC2080::update() {
     if (this->m_sensor != nullptr) {
-        float t = this->m_sensor->readTemp();
-        if (t == -40.0) {
-            return TEMP_ERROR_READING;
-        }
-        this->m_last_value = t;
-        return t;
+        this->m_last_value = TEMP_ERROR_READING;
     }
-    return TEMP_ERROR_READING;
+    float t = this->m_sensor->readTemp();
+    if (t == -40.0) {
+        t = TEMP_ERROR_READING;
+    }
+    this->m_last_value = t;
 }
 
 
@@ -151,12 +149,11 @@ Sensor_BMP280::~Sensor_BMP280() {
     }
 }
 
-float Sensor_BMP280::get_value() {
-    if (this->m_sensor != nullptr) {
-        this->m_last_value = this->m_sensor->readTemperature();
-        return this->m_last_value;
+void Sensor_BMP280::update() {
+    if (this->m_sensor == nullptr) {
+        this->m_last_value = TEMP_ERROR_READING;
     }
-    return TEMP_ERROR_READING;
+    this->m_last_value = this->m_sensor->readTemperature();
 }
 
 
@@ -167,9 +164,8 @@ Sensor_DOOR::Sensor_DOOR(int pin) {
     // TODO
 }
 
-float Sensor_DOOR::get_value() {
+void Sensor_DOOR::update() {
     // TODO
-    return 0.0;
 }
 
 
@@ -180,9 +176,8 @@ Sensor_BUTTON::Sensor_BUTTON(int pin, void (*callback)(Sensor_BUTTON *button)) {
     // TODO
 }
 
-float Sensor_BUTTON::get_value() {
-    // TODO
-    return 0.0;
+void Sensor_BUTTON::update() {
+    // TODO    
 }
 
 // --------------------------------------------------------------------------
@@ -192,7 +187,6 @@ Sensor_DUMMY::Sensor_DUMMY(float min, float max, float max_variation) {
     // TODO
 }
 
-float Sensor_DUMMY::get_value() {
-    // TODO
-    return 0.0;
+void Sensor_DUMMY::update() {
+    // TODO    
 }

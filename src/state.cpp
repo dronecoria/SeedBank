@@ -11,7 +11,7 @@ float State::get_avg_temperature() {
     float temperatures = 0.0;
     int count = 0;
     for (Sensor *s : this->m_config->sensors) {
-        float t = s->get_last_value();
+        float t = s->get_value();
         if (t != TEMP_ERROR_READING) {
             temperatures += t;
             count += 1;
@@ -25,16 +25,14 @@ float State::get_avg_temperature() {
 
 void State::sensors_update() {
     for (Sensor* s : this->m_config->sensors) {
-        if (s->get_value() == TEMP_ERROR_READING){
-            Serial.println("ERROR reading sesnsor value");
-        }
+        s->update();
     }
 }
 
 void State::print_all_temperatures() {
     Serial.print("[");
     for (Sensor *s : this->m_config->sensors) {
-        Serial.print(s->get_last_value());
+        Serial.print(s->get_value());
         Serial.print(", ");
     }
     Serial.print("]");

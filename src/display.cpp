@@ -6,7 +6,7 @@ void loop_display_task(void *p_display) {
     Display *display = (Display *) p_display;
     while(true) {
         display->loop();
-        delay(1000);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 */
@@ -30,8 +30,8 @@ Display::Display(Config *config, State *state) {
 
 void Display::loop() {
 
-    struct tm   time_info;
-    char        time_str[20];  // 2021-05-21 12:32:45
+    tm time_info;
+    char time_str[20];  // 2021-05-21 12:32:45
 
     Serial.print("Display::loop");
     if (this->m_state->is_clock_set) {

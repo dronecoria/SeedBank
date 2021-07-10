@@ -1,6 +1,9 @@
 #ifndef TIMETABLE_H
 #define TIMETABLE_H
 
+#include <Arduino.h>
+#include <sys/time.h>
+
 class Timetable {
 public:
     Timetable(String start, String end, float value);

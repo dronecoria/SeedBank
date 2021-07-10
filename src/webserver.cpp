@@ -8,7 +8,7 @@ void loop_webserver_task(void *p_webserver) {
     WebServer *webserver = (WebServer *) p_webserver;
     while(true) {
         webserver->loop();
-        delay(1000);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -109,7 +109,7 @@ void WebServer::init_server() {
         request->send(SPIFFS, home_page);
         });
 
-    this->m_webserver->on("/save_setup", HTTP_POST, [](AsyncWebServerRequest* request) {}, NULL, save_setup);
+    this->m_webserver->on("/save_setup", HTTP_POST, [](AsyncWebServerRequest* request) {}, nullptr, save_setup);
 
     this->m_webserver->on("/get_time", HTTP_GET, [](AsyncWebServerRequest* request) {
         request->send(200,"text/plain",get_time());
@@ -144,16 +144,16 @@ void WebServer::send_data() {
 }
 
 void WebServer::set_default_time() {
-    struct tm tm;
-    tm.tm_year = 2021 - 1900;
-    tm.tm_mon = 06;
-    tm.tm_mday = 16;
-    tm.tm_hour = 14;
-    tm.tm_min = 10;
-    tm.tm_sec = 10;
-    time_t t = mktime(&tm);
+    tm time_info;
+    time_info.tm_year = 2021 - 1900;
+    time_info.tm_mon = 06;
+    time_info.tm_mday = 16;
+    time_info.tm_hour = 14;
+    time_info.tm_min = 10;
+    time_info.tm_sec = 10;
+    time_t t = mktime(&time_info);
     struct timeval now = { .tv_sec = t };
-    settimeofday(&now, NULL);
+    settimeofday(&now, nullptr);
     // TODO: Set this variable on check_ntp
     //this->m_state->is_clock_set = true;
 
@@ -161,8 +161,8 @@ void WebServer::set_default_time() {
 
 String get_time()
 {
-    struct tm   time_info;
-    char        time_str[20];  // 2021-05-21 12:32:45
+    tm time_info;
+    char time_str[20];  // 2021-05-21 12:32:45
 
     getLocalTime(&time_info);
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", &time_info);
@@ -181,7 +181,7 @@ String WebServer::get_status()
     for (auto sensor : m_config->sensors) {
         JsonObject obj = sensors.createNestedObject();
         obj["type"] = sensor->get_type();
-        obj["value"] = sensor->get_last_value();
+        obj["value"] = sensor->get_value();
     }
 
     JsonArray actuators = root.createNestedArray("actuators");
