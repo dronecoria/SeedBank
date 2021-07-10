@@ -1,0 +1,85 @@
+body{
+    max-width: 900px;
+    margin: auto;
+    color: #333333;
+}
+
+nav {
+    position: sticky;
+    font-size: 1.2em;
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+nav a
+{
+    margin: 0.5em;
+    padding: 0.5em 0 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #222;
+}
+
+nav a.selected{
+    border-bottom: 5px solid #5da35b;
+    cursor: default;
+}
+
+nav a:hover{
+    border-bottom: 5px solid #5da35b;
+}
+
+fieldset{
+    margin: 1em 0;
+    padding: 1em;
+}
+fieldset label {
+    display: block;
+    margin: 0.1em;
+}
+.inline{
+    display: inline-block;
+}
+
+button.mini {
+    margin: 0;
+    padding: 0em;
+    font-size: 1em;
+    width: 1.5em;
+    height: 1.5em;
+    font-weight: bold;
+}
+
+fieldset label input,fieldset label select ,fieldset label output{
+    padding: 0.2em;
+    margin: 0.3em;
+    margin-left: 1em;
+}
+
+output {
+    border: 1px solid #c3c3c3;
+    padding: 0.8em !important;
+    border-radius: 5px;
+}
+
+fieldset legend {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+button {
+    padding: 0.5em 1.5em;
+    cursor: pointer;
+    margin: 0.5em;
+    font-size: 1.05em;
+}
+
+#log{
+    padding: 2em;
+    border: 1px dotted rgb(77, 77, 77);
+    background-color: rgb(194, 194, 194);
+    overflow: auto;
+    margin: 0.5em;
+    font-size: 1em;
+}

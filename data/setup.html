@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Configurator</title>
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-menu">
+                <a class="navbar-item" href="/"> Info </a>
+                <a class="navbar-item selected" href="/setup.html"> Setup </a>
+            </div>
+        </nav>
+
+        <main>
+            <form name="setup">
+                <fieldset>
+                    <legend>Wifi</legend>
+                    <label>
+                        Working mode
+                        <select name="mode">
+                            <option value="setup">Setup</option>
+                            <option value="normal">Normal</option>
+                        </select>
+                    </label>
+                    <label>
+                        SSID
+                        <input
+                            name="wifi_ssid"
+                            type="text"
+                            placeholder="Wifi ssid"
+                            required
+                        />
+                    </label>
+                    <label>
+                        Password
+                        <input
+                            name="wifi_password"
+                            type="text"
+                            placeholder="Wifi password"
+                        />
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>Time</legend>
+                    <label>
+                        NTP server
+                        <input
+                            name="ntp_server"
+                            type="text"
+                            placeholder="pool.ntp.org"
+                            required
+                        />
+                    </label>
+                    <label>
+                        NTP gmt offset (Hours)
+                        <input
+                            name="ntp_gmt_offset"
+                            type="number"
+                            placeholder="0"
+                            required
+                        />
+                    </label>
+                    <br />
+                    <output id="time"></output>
+                    <button type="button">Sync</button>
+                </fieldset>
+                <fieldset id="sensors">
+                    <legend>
+                        Sensors
+                        <button id="add_sensor" type="button" class="mini">
+                            +
+                        </button>
+                    </legend>
+                    <template>
+                        <div>
+                            <label class="inline">
+                                <select name="type" data-sensor="" required>
+                                    <option value="HDC2080">HDC2080</option>
+                                    <option value="BMP280">BMP280</option>
+                                    <option value="DS18B20">DS18B20</option>
+                                </select>
+                            </label>
+                            <label class="inline">
+                                <input
+                                    placeholder="pin or address"
+                                    name="value"
+                                    type="number"
+                                    data-sensor=""
+                                    required
+                                />
+                            </label>
+                            <button
+                                type="button"
+                                class="mini inline del_sensor"
+                            >
+                                -
+                            </button>
+                        </div>
+                    </template>
+                </fieldset>
+
+                    <fieldset id="heat" class="inline">
+                        <legend>heat</legend>
+                        <label class="inline">
+                            <select name="type" required data-actuator="heat">
+                                <option value="NONE">NONE</option>
+                                <option value="RELAY">RELAY</option>
+                                <option value="SOLID">SOLID</option>
+                                <option value="PWM">PWM</option>
+                            </select>
+                        </label>
+                        <label class="inline">
+                            <input
+                                placeholder="pin or address"
+                                name="value"
+                                type="number"
+                                required
+                                data-actuator="heat"
+                            />
+                        </label>
+                    </fieldset>
+                    <fieldset id="cold" class="inline">
+                        <legend>Cold</legend>
+                        <label class="inline">
+                            <select name="type" required data-actuator="cold">
+                                <option value="NONE">NONE</option>
+                                <option value="RELAY">RELAY</option>
+                                <option value="SOLID">SOLID</option>
+                                <option value="PWM">PWM</option>
+                            </select>
+                        </label>
+                        <label class="inline">
+                            <input
+                                placeholder="pin or address"
+                                name="value"
+                                type="number"
+                                required
+                                data-actuator="cold"
+                            />
+                        </label>
+                    </fieldset>
+                    <fieldset id="fan" class="inline">
+                        <legend>Fan</legend>
+                        <label class="inline">
+                            <select name="type" required data-actuator="fan">
+                                <option value="NONE">NONE</option>
+                                <option value="RELAY">RELAY</option>
+                                <option value="SOLID">SOLID</option>
+                                <option value="PWM">PWM</option>
+                            </select>
+                        </label>
+                        <label class="inline">
+                            <input
+                                placeholder="pin or address"
+                                name="value"
+                                type="number"
+                                required
+                                data-actuator="fan"
+                            />
+                        </label>
+                    </fieldset>
+                    <fieldset id="light" class="inline">
+                        <legend>Light</legend>
+                        <label class="inline">
+                            <select name="type" required data-actuator="light">
+                                <option value="NONE">NONE</option>
+                                <option value="RELAY">RELAY</option>
+                                <option value="SOLID">SOLID</option>
+                                <option value="PWM">PWM</option>
+                            </select>
+                        </label>
+                        <label class="inline">
+                            <input
+                                placeholder="pin or address"
+                                name="value"
+                                type="number"
+                                required
+                                data-actuator="light"
+                            />
+                        </label>
+                    </fieldset>
+
+
+                <fieldset id="schedule">
+                    <legend>
+                        Schedule
+                        <button id="add_timetable" type="button" class="mini">
+                            +
+                        </button>
+                    </legend>
+                    <template>
+                        <div>
+                            <label class="inline">
+                                Start
+                                <input
+                                    type="time"
+                                    name="start"
+                                    data-timetable=""
+                                    required
+                                />
+                            </label>
+                            <label class="inline">
+                                End
+                                <input
+                                    type="time"
+                                    name="end"
+                                    data-timetable=""
+                                    required
+                                />
+                            </label>
+                            <label class="inline">
+                                <input
+                                    placeholder="Temp ref."
+                                    name="value"
+                                    type="number"
+                                    data-timetable=""
+                                    required
+                                />
+                            </label>
+                            <button
+                                type="button"
+                                class="mini inline del_timetable"
+                            >
+                                -
+                            </button>
+                        </div>
+                    </template>
+                </fieldset>
+
+                <button name="save" type="submit">SAVE</button>
+            </form>
+        </main>
+        <div id="log"></div>
+
+        <script type="text/javascript" src="/setup.js"></script>
+    </body>
+</html>

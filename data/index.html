@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Information</title>
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-menu">
+                <a class="navbar-item selected" href="/"> Info </a>
+                <a class="navbar-item" href="/setup.html"> Setup </a>
+            </div>
+        </nav>
+
+        <main>
+            <section id="others"></section>
+            <section id="sensors"></section>
+            <section id="actuators"></section>
+
+        </main>
+        <div id="log"></div>
+
+        <template id="sensor">
+            <fieldset class="inline">
+                <legend class="type inline"></legend>
+                <label class="inline">
+                    Value
+                    <output class="value"></output>
+                </label>
+            </fieldset>
+        </template>
+        <template id="actuator">
+            <fieldset>
+                <legend class="name inline"></legend>
+                <label class="inline">
+                    Type
+                    <output class="type"></output>
+                </label>
+                <label class="inline">
+                    Value
+                    <output class="value"></output>
+                </label>
+                <button>TOOGLE</button>
+            </fieldset>
+        </template>
+        <template id="other">
+            <fieldset class="inline">
+                <legend class="name inline"></legend>
+                <label class="inline">
+                    Value
+                    <output class="value"></output>
+                </label>
+            </fieldset>
+        </template>
+
+	  <script type="text/javascript" src="/index.js"></script>
+    </body>
+</html>
