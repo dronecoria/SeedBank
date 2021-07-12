@@ -2,6 +2,8 @@
 #include <sys/time.h>
 #include <WiFi.h>
 #include <SPIFFS.h>
+#include <AsyncElegantOTA.h>
+
 #include "webserver.h"
 
 void loop_webserver_task(void *p_webserver) {
@@ -134,6 +136,7 @@ void WebServer::init_server() {
         }
         });
 
+    AsyncElegantOTA.begin(this->m_webserver);    // Start ElegantOTA
     this->m_webserver->begin();
 }
 
