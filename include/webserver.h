@@ -29,10 +29,13 @@ private:
     void send_data();
 
     String get_status();
+
+    void set_value(String json);
+
 };
 
 String get_time();
-void save_setup(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+void save_setup(AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total);
 String GetBodyContent(uint8_t *data, size_t len);
 
 #endif

@@ -194,9 +194,9 @@ function addSensor(type = "", value = "") {
     input.dataset.sensor = indexSensor;
     select.value = type;
     input.value = value;
-    const delButton = clone.querySelector(".del_sensor");
+    const delButton = clone.querySelector(".delete");
     delButton.addEventListener("click", (event) => {
-        event.target.parentNode.remove();
+        event.target.parentNode.parentNode.remove();
     });
     formSetup["sensors"].appendChild(clone);
     indexSensor++;
@@ -218,9 +218,9 @@ function addTimetable(start = "", end = "", value = "") {
     input_end.value = end;
     input_value.value = value;
 
-    const delButton = clone.querySelector(".del_timetable");
+    const delButton = clone.querySelector(".delete");
     delButton.addEventListener("click", (event) => {
-        event.target.parentNode.remove();
+        event.target.parentNode.parentNode.remove();
     });
     formSetup["schedule"].appendChild(clone);
     indexTimetable++;

@@ -50,6 +50,8 @@ void Config::read() {
     // Parse JSON configuration
     Serial.println("Config::Parsing JSON config");
     this->m_mode = this->decode_json_key_as_mode(doc, "mode", MODE::SETUP);
+    this->m_handler = this->decode_json_key_as_handler(doc, "handler", HANDLER::TEST);
+
     this->m_ntp_server = this->decode_json_key_as_name(doc, "ntp_server", "pool.ntp.org");
     this->m_ntp_gmt_offset = this->decode_json_key_as_long(doc, "ntp_gmt_offset", 0);
     this->m_ntp_daylight_offset = this->decode_json_key_as_long(doc, "ntp_daylight_offset", 0);
@@ -96,6 +98,33 @@ Actuator* Config::set_actuator(String type, int value)
 MODE Config::get_mode() {
     return this->m_mode;
 }
+HANDLER Config::get_handler(){
+    return m_handler;
+}
+
+String Config::get_mode_string() {
+    switch (m_mode)
+    {
+        case MODE::SETUP:
+            return "setup";
+        case MODE::NORMAL:
+            return "normal";
+    }
+    return "unknow";
+}
+
+String Config::get_handler_string() {
+    switch (m_handler)
+    {
+        case HANDLER::TEST:
+            return "test";
+        case HANDLER::BASIC:
+            return "basic";
+        case HANDLER::PID:
+            return "pid";
+    }
+    return "unknow";
+}
 
 String Config::get_ntp_server() {
     return this->m_ntp_server;
@@ -135,6 +164,19 @@ MODE Config::decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE de
         }
         else {
             return MODE::NORMAL;
+        }
+    }
+    return default_value;
+}
+
+HANDLER Config::decode_json_key_as_handler(JsonDocument& doc, const char* key, HANDLER default_value) {
+    if (doc.containsKey(key) && doc[key].is<const char*>()) {
+        if (strcmp(doc[key].as<const char*>(), "test") == 0) {
+            return HANDLER::TEST;
+        }else if (strcmp(doc[key].as<const char*>(), "basic") == 0) {
+            return HANDLER::BASIC;
+        }else if (strcmp(doc[key].as<const char*>(), "pid") == 0) {
+            return HANDLER::PID;
         }
     }
     return default_value;

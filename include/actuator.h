@@ -50,13 +50,14 @@ public:
 
     void handlePWM(unsigned long deltatime);
     inline int frequency(){return interval_time/steps;};
+    inline bool get_state_pin(){return m_state_pin;};
 private:
 
     TaskHandle_t m_task;
    // float m_pwmValue;
     //bool  m_pwmState;
     int   m_pwmTickTime;
-
+    bool m_state_pin = false;
     float m_value = 0.0f;
 
     const int interval_time = 1000;

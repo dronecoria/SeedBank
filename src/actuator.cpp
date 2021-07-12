@@ -30,8 +30,9 @@ void Actuator::set_value(float value)
 {
     if(value > 0.01f){
         this->enable();
+    }else{
+        this->disable();
     }
-    this->disable();
 }
 
 /*
@@ -104,7 +105,7 @@ void loop_softPWM_task(void* p_softPWM) {
     unsigned long previousMicros = 0;
 
     while (true) {
-        if(softPwm->is_active()){
+        if(softPwm->is_active() || softPwm->get_state_pin()){
             currentMicros = millis();
             softPwm->handlePWM(currentMicros - previousMicros);
             previousMicros = currentMicros;
@@ -119,7 +120,8 @@ void SoftPwm::handlePWM(unsigned long deltatime) {
 
     float step = min(1.0f, ((float)m_pwmTickTime / (float)interval_time));  // between 0 and 1
 
-    digitalWrite(m_pin, (step < m_value) );
+    m_state_pin = (step < m_value);
+    digitalWrite(m_pin, m_state_pin);
 
     if (m_pwmTickTime > interval_time) {
         m_pwmTickTime -= interval_time;
@@ -128,7 +130,7 @@ void SoftPwm::handlePWM(unsigned long deltatime) {
 
 void SoftPwm::set_value(float value)
 {
-    value = max(0.0f, min(100.0f, value));
+    value = max(0.0f, min(1.0f, value));
 
     m_value = value;
     m_is_active = (value > 0.001f);

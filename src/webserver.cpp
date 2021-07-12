@@ -110,6 +110,12 @@ void WebServer::init_server() {
         });
 
     this->m_webserver->on("/save_setup", HTTP_POST, [](AsyncWebServerRequest* request) {}, nullptr, save_setup);
+    this->m_webserver->on("/set_value", HTTP_POST, [](AsyncWebServerRequest* request) {}, nullptr,
+        [&](AsyncWebServerRequest* request, uint8_t* data, size_t len, size_t index, size_t total) {
+            String bodyContent = GetBodyContent(data, len);
+            set_value(bodyContent);
+            request->send(200, "text/plain", bodyContent);
+        });
 
     this->m_webserver->on("/get_time", HTTP_GET, [](AsyncWebServerRequest* request) {
         request->send(200,"text/plain",get_time());
@@ -174,6 +180,10 @@ String WebServer::get_status()
     StaticJsonDocument<2048> doc;
 
     JsonObject root = doc.to<JsonObject>();
+
+    root["mode"] = m_config->get_mode_string();
+    root["handler"] = m_config->get_handler_string();
+
     root["reference_temp"] = m_config->get_temperature_reference();
     root["avg_temp"] = m_state->get_avg_temperature();
 
@@ -258,4 +268,31 @@ void save_setup(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_
 
     delay(1000);
     ESP.restart();
+}
+
+void WebServer::set_value(String json) {
+    StaticJsonDocument<128> doc;
+    DeserializationError error;
+
+
+    error = deserializeJson(doc, json);
+    if (error || !doc.containsKey("name") || !doc.containsKey("value")) {
+        Serial.println("Error in parameters");
+        return;
+    }
+    String name = doc["name"].as<const char*>();
+    float value = doc["value"].as<float>();
+
+    Serial.println("Change value of " + name + " to " + String(value));
+
+    if(name == "heat"){
+        m_config->heat->set_value(value);
+    } else if (name == "cold") {
+        m_config->cold->set_value(value);
+    } else if (name == "fan") {
+        m_config->fan->set_value(value);
+    } else if (name == "light") {
+        m_config->light->set_value(value);
+    }
+
 }

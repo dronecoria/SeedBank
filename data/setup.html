@@ -67,17 +67,17 @@
                     </label>
                     <br />
                     <output id="time"></output>
-                    <button type="button">Sync</button>
+                    <!-- <button type="button">Sync</button> -->
                 </fieldset>
                 <fieldset id="sensors">
                     <legend>
                         Sensors
-                        <button id="add_sensor" type="button" class="mini">
+                        <button id="add_sensor" type="button" class="mini clean">
                             +
                         </button>
                     </legend>
                     <template>
-                        <div>
+                        <div class="row">
                             <label class="inline">
                                 <select name="type" data-sensor="" required>
                                     <option value="HDC2080">HDC2080</option>
@@ -94,16 +94,15 @@
                                     required
                                 />
                             </label>
-                            <button
-                                type="button"
-                                class="mini inline del_sensor"
-                            >
-                                -
-                            </button>
+                            <label class="inline">
+                                <button type="button" class="delete sensor mini clean">
+                                    &mdash;
+                                </button>
+                            </label>
                         </div>
                     </template>
                 </fieldset>
-
+                <div class="row">
                     <fieldset id="heat" class="inline">
                         <legend>heat</legend>
                         <label class="inline">
@@ -184,17 +183,16 @@
                             />
                         </label>
                     </fieldset>
-
-
+                </div>
                 <fieldset id="schedule">
                     <legend>
                         Schedule
-                        <button id="add_timetable" type="button" class="mini">
+                        <button id="add_timetable" type="button" class="mini clean">
                             +
                         </button>
                     </legend>
                     <template>
-                        <div>
+                        <div class="row">
                             <label class="inline">
                                 Start
                                 <input
@@ -222,17 +220,26 @@
                                     required
                                 />
                             </label>
-                            <button
-                                type="button"
-                                class="mini inline del_timetable"
-                            >
-                                -
-                            </button>
+                            <label class="inline">
+                                <button type="button" class="delete timetable mini clean">
+                                    &mdash;
+                                </button>
+                            </label>
                         </div>
                     </template>
                 </fieldset>
+                <fieldset>
+                    <legend>Handler</legend>
+                    <label>
+                        <select name="handler">
+                            <option value="test">Test</option>
+                            <option value="basic">Basic</option>
+                            <option value="pid">pid</option>
+                        </select>
+                    </label>
+                </fieldset>
 
-                <button name="save" type="submit">SAVE</button>
+                <button name="save" type="submit" class="clean">SAVE</button>
             </form>
         </main>
         <div id="log"></div>

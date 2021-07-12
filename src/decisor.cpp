@@ -22,11 +22,18 @@ Decisor::Decisor(Config *config, State *state) {
         &this->task,          // Task handle.
         1);                   // Core where the task should run
 
+    select_handler(m_config->get_handler());
 }
 
 void Decisor::loop() {
-    this->m_state->sensors_update();
-    float t_avg = this->m_state->get_avg_temperature();
+    m_state->sensors_update();
+
+    m_handler();
+
+
+
+    // info
+    float t_avg = m_state->get_avg_temperature();
     float t_reference = m_config->get_temperature_reference();
 
     // float t_diff = 0;
@@ -39,11 +46,14 @@ void Decisor::loop() {
     //     }
     // }
     float t_max_diff = 0;
-    for (auto s : this->m_config->sensors) {
+    for (auto s : m_config->sensors) {
         float t = s->get_value();
-        t_max_diff = max(t_max_diff, abs(t - t_avg) );
+        t_max_diff = max(t_max_diff, abs(t - t_avg));
     }
     //t_diff /= num_sensors;
+
+
+
 
     Serial.print("Decisor::loop");
     Serial.print(" - Avg Temp: ");
@@ -59,26 +69,52 @@ void Decisor::loop() {
 
     Serial.println("");
 
+}
 
+void Decisor::set_handler(std::function<void()> handler) {
+    m_handler = handler;
+}
 
-    //basic decissor
-    if(t_reference < t_avg){
-        if (this->m_config->cold != nullptr) {
-            this->m_config->cold->enable();
-        }
-    }
-    if (t_reference > t_avg) {
-        if (this->m_config->heat != nullptr) {
-            this->m_config->heat->enable();
-        }
-    }
-    if(t_max_diff > 0.25f){
-        if (this->m_config->fan != nullptr) {
-            //this->m_config->fan->set_value(t_diff);
-            this->m_config->fan->enable();
-        }
-    }
-    if (this->m_config->light != nullptr) {
-        this->m_config->light->set_value(t_max_diff);
+void Decisor::select_handler(HANDLER handler) {
+    switch(handler){
+        case HANDLER::BASIC:
+            set_handler([&]() {
+                float t_avg = m_state->get_avg_temperature();
+                float t_reference = m_config->get_temperature_reference();
+
+                float t_max_diff = 0;
+                for (auto s : m_config->sensors) {
+                    float t = s->get_value();
+                    t_max_diff = max(t_max_diff, abs(t - t_avg));
+                }
+
+                if (t_reference < t_avg) {
+                    if (m_config->cold != nullptr) {
+                        m_config->cold->enable();
+                    }
+                }
+                if (t_reference > t_avg) {
+                    if (m_config->heat != nullptr) {
+                        m_config->heat->enable();
+                    }
+                }
+                if (t_max_diff > 0.25f) {
+                    if (m_config->fan != nullptr) {
+                        //this->m_config->fan->set_value(t_diff);
+                        m_config->fan->enable();
+                    }
+                }
+                if (m_config->light != nullptr) {
+                    m_config->light->set_value(t_max_diff);
+                }
+                });
+            break;
+        case HANDLER::PID:
+            set_handler([](){});
+            break;
+        case HANDLER::TEST:
+        default:
+            set_handler([&](){});
+            break;
     }
 }
