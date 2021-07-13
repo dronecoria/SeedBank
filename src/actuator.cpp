@@ -120,7 +120,7 @@ void SoftPwm::handlePWM(unsigned long deltatime) {
 
     float step = min(1.0f, ((float)m_pwmTickTime / (float)interval_time));  // between 0 and 1
 
-    m_state_pin = (step < m_value);
+    m_state_pin = (step <= m_value);
     digitalWrite(m_pin, m_state_pin);
 
     if (m_pwmTickTime > interval_time) {
