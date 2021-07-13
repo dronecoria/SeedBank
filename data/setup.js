@@ -115,10 +115,16 @@ ready(async () => {
         let count = 0;
         do {
             timetable = null;
+            let testDuplicatedBegin = false;
             data["schedule"].forEach(t => {
                 if (t.start == checking){
+                    if(testDuplicatedBegin){
+                        //errorInSchedule("Two schudules begin in the same time");
+                        return;
+                    }
                     timetable = t;
                     count++;
+                    testDuplicatedBegin = true;
                 }
             });
             if(timetable == null){
@@ -131,6 +137,7 @@ ready(async () => {
             }
             checking = timetable.end;
         } while (timetable.end != "00:00");
+
         if (Object.keys(data["schedule"]).length != count ){
             errorInSchedule("Overlaps in schedule");
             return;

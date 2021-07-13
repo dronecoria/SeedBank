@@ -121,6 +121,17 @@ button[name="save"]{
     flex-wrap: wrap;
 }
 
+main section {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+main section > * {
+    flex-grow: 1;
+    margin: 1em;
+}
+
 #log{
     padding: 2em;
     border: 1px dotted rgb(77, 77, 77);
