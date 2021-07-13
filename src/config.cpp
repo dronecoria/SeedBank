@@ -14,7 +14,30 @@ Config::~Config() {
 
 void Config::reset() {
     File file = SPIFFS.open(CONFIG_FILENAME, FILE_WRITE);
-    file.print("{\"mode\": \"setup\", \"ntp_server\": \"pool.ntp.org\", \"ntp_gmt_offset\": 0, \"ntp_daylight_offset\": 0}");
+    String default_values = R"(
+        {
+            "sensors": [
+                { "type": "HDC2080", "value" : 64 },
+                { "type": "HDC2080", "value" : 65 }
+            ] ,
+            "schedule" : [
+                { "start": "00:00", "end" : "24:00", "value" : 10 }
+            ] ,
+            "mode" : "setup",
+            "handler" : "test"
+            "wifi_ssid" : "",
+            "wifi_password" : "",
+            "ntp_server" : "pool.ntp.org",
+            "ntp_gmt_offset" : 2,
+            "heat" :  { "type": "PWM", "value" : 16 },
+            "cold" :  { "type": "RELAY", "value" : 19 },
+            "fan" :   { "type": "RELAY", "value" : 18 },
+            "light" : { "type": "NONE", "value" : 5 },
+        }
+    )";
+    file.print(default_values);
+    //file.print("{\"mode\": \"setup\", \"ntp_server\": \"pool.ntp.org\", \"ntp_gmt_offset\": 0, \"ntp_daylight_offset\": 0}");
+
     file.close();
 }
 
