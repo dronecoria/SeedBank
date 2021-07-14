@@ -1,4 +1,5 @@
 # SeedBank
+
 Open Source Seed Bank for seed storage.
 
 ## Libraries in use
@@ -45,11 +46,17 @@ pio run -t uploadfs
     ```
 
 - File in .pio/build/{board-name}/spiffs.bin
-- Upload in page http://{ip}/update
+- Upload in page <http://{ip}/update>
+
+## First run
+
+- Connect to wifi named 'SeedBank Setup'
+- Load page <http://192.168.1.1>
+- Configure wifi settings and set working mode to 'normal'
 
 ## TODO
 
-    * Create PID or similar control
-    * Communication with server for save logs
-    * Send alerts
-    * Instalation instructions.
+- Create PID or similar control
+- Communication with server for save logs
+- Send alerts
+- Instalation instructions.
