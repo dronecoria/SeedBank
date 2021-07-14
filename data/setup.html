@@ -80,9 +80,14 @@
                         <div class="row">
                             <label class="inline">
                                 <select name="type" data-sensor="" required>
-                                    <option value="HDC2080">HDC2080</option>
-                                    <option value="BMP280">BMP280</option>
-                                    <option value="DS18B20">DS18B20</option>
+                                    <optgroup label="Temperature">
+                                        <option value="HDC2080">HDC2080</option>
+                                        <option value="BMP280">BMP280</option>
+                                        <option value="DS18B20">DS18B20</option>
+                                    </optgroup>
+                                    <optgroup label="Others">
+                                        <option value="DOOR">DOOR</option>
+                                    </optgroup>
                                 </select>
                             </label>
                             <label class="inline">

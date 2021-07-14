@@ -26,8 +26,12 @@ class Sensor {
 public:
     Sensor();
     virtual void update();
+    virtual void reload();
+
     float get_value();
-    String get_type();
+    String get_type_string();
+    inline SENSOR_TYPE get_type() {return m_type;}
+    inline int get_pin(){return m_pin;}
 
 protected:
     SENSOR_TYPE m_type = SENSOR_TYPE::NONE;
@@ -42,7 +46,9 @@ class Sensor_DS18B20 : public Sensor {
 public:
     Sensor_DS18B20(int pin);
     ~Sensor_DS18B20();
-    void update(void);
+    void update() override;
+    void reload() override {};
+
     int get_count(void);
     float get_value_by_index(int index);
 
@@ -62,7 +68,8 @@ class Sensor_HDC2080 : public Sensor {
 public:
     Sensor_HDC2080(int address);
     ~Sensor_HDC2080();
-    void update(void);
+    void update() override;
+    void reload() override;
 
 private:
     HDC2080 *m_sensor = nullptr;
@@ -75,7 +82,8 @@ class Sensor_BMP280 : public Sensor {
 public:
     Sensor_BMP280(int address);
     ~Sensor_BMP280();
-    void update(void);
+    void update() override;
+    void reload() override {};
 
 private:
     Adafruit_BMP280 *m_sensor = nullptr;
@@ -87,7 +95,8 @@ private:
 class Sensor_DOOR : public Sensor {
 public:
     Sensor_DOOR(int pin);
-    void update(void);
+    void update() override;
+    void reload() override {};
 };
 
 // --------------------------------------------------------------------------
@@ -96,7 +105,8 @@ public:
 class Sensor_BUTTON : public Sensor {
 public:
     Sensor_BUTTON(int pin, void (*callback)(Sensor_BUTTON *button));
-    void update(void);
+    void update() override;
+    void reload() override {};
 
 private:
     unsigned long m_last_interrupt_time = 0;
@@ -109,7 +119,8 @@ private:
 class Sensor_DUMMY : public Sensor {
 public:
     Sensor_DUMMY(float min, float max, float max_variation);
-    void update(void);
+    void update() override;
+    void reload() override {};
 
 private:
     float m_min;

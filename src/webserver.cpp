@@ -193,8 +193,13 @@ String WebServer::get_status()
     JsonArray sensors = root.createNestedArray("sensors");
     for (auto sensor : m_config->sensors) {
         JsonObject obj = sensors.createNestedObject();
-        obj["type"] = sensor->get_type();
-        obj["value"] = sensor->get_value();
+        obj["type"] = sensor->get_type_string();
+        if(sensor->get_type() == SENSOR_TYPE::DOOR){
+            obj["value"] = (sensor->get_value() >0 ) ? "Opened" : "Closed";
+        }else{
+            obj["value"] = sensor->get_value();
+        }
+
     }
 
     JsonArray actuators = root.createNestedArray("actuators");

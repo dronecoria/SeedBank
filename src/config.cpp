@@ -85,11 +85,14 @@ void Config::read() {
         if (strcmp(repo["type"].as<const char*>(), "DS18B20") == 0) {
             this->sensors.push_back(new Sensor_DS18B20(repo["value"].as<int>()));
         }
-        if (strcmp(repo["type"].as<const char*>(), "HDC2080") == 0) {
+        else if (strcmp(repo["type"].as<const char*>(), "HDC2080") == 0) {
             this->sensors.push_back(new Sensor_HDC2080(repo["value"].as<int>()));
         }
         else if (strcmp(repo["type"].as<const char*>(), "BMP280") == 0) {
             this->sensors.push_back(new Sensor_BMP280(repo["value"].as<int>()));
+        }
+        else if (strcmp(repo["type"].as<const char*>(), "DOOR") == 0) {
+            this->sensors.push_back(new Sensor_DOOR(repo["value"].as<int>()));
         }
     }
 

@@ -1,10 +1,11 @@
-#include "sensor.h"
+#include <tuple>
 
+#include "sensor.h"
 
 Sensor::Sensor() {}
 float Sensor::get_value() { return this->m_last_value; }
 
-String Sensor::get_type(){
+String Sensor::get_type_string(){
     switch (m_type)
     {
     case SENSOR_TYPE::DHT22:
@@ -78,7 +79,7 @@ void Sensor_DS18B20::update(void) {
         temperatures += this->m_get_value_by_index(i);
     }
     if (count > 0) {
-        this->m_last_value = temperatures / count;        
+        this->m_last_value = temperatures / count;
     }
     this->m_last_value = TEMP_ERROR_READING;
 }
@@ -89,18 +90,7 @@ void Sensor_DS18B20::update(void) {
 Sensor_HDC2080::Sensor_HDC2080(int address) {
     this->m_type = SENSOR_TYPE::HDC2080;
     this->m_pin = address;
-    this->m_sensor = new HDC2080(this->m_pin);
-    this->m_sensor->begin();
-    this->m_sensor->reset();
-    this->m_sensor->setHighTemp(48);
-    this->m_sensor->setLowTemp(2);
-    this->m_sensor->setHighHumidity(95);
-    this->m_sensor->setLowHumidity(10);
-    this->m_sensor->setMeasurementMode(TEMP_AND_HUMID);
-    this->m_sensor->setRate(ONE_HZ);
-    this->m_sensor->setTempRes(FOURTEEN_BIT);
-    this->m_sensor->setHumidRes(FOURTEEN_BIT);
-    this->m_sensor->triggerMeasurement();
+    reload();
 }
 
 Sensor_HDC2080::~Sensor_HDC2080() {
@@ -110,6 +100,25 @@ Sensor_HDC2080::~Sensor_HDC2080() {
     }
 }
 
+void Sensor_HDC2080::reload()
+ {
+    if(m_sensor != nullptr){
+        delete m_sensor;
+    }
+    m_sensor = new HDC2080(this->m_pin);
+    m_sensor->begin();
+    m_sensor->reset();
+    m_sensor->setHighTemp(48);
+    m_sensor->setLowTemp(2);
+    m_sensor->setHighHumidity(95);
+    m_sensor->setLowHumidity(10);
+    m_sensor->setMeasurementMode(TEMP_AND_HUMID);
+    m_sensor->setRate(ONE_HZ);
+    m_sensor->setTempRes(FOURTEEN_BIT);
+    m_sensor->setHumidRes(FOURTEEN_BIT);
+    m_sensor->triggerMeasurement();
+ }
+
 void Sensor_HDC2080::update() {
     if (this->m_sensor != nullptr) {
         this->m_last_value = TEMP_ERROR_READING;
@@ -117,6 +126,7 @@ void Sensor_HDC2080::update() {
     float t = this->m_sensor->readTemp();
     if (t == -40.0) {
         t = TEMP_ERROR_READING;
+        reload();
     }
     this->m_last_value = t;
 }
@@ -156,16 +166,39 @@ void Sensor_BMP280::update() {
     this->m_last_value = this->m_sensor->readTemperature();
 }
 
-
 // --------------------------------------------------------------------------
 // Sensor DOOR: Generic input state sensor
 // --------------------------------------------------------------------------
 Sensor_DOOR::Sensor_DOOR(int pin) {
-    // TODO
+    m_pin = pin;
+    m_type = SENSOR_TYPE::DOOR;
+
+    auto callback =  [](void* data) {
+        Sensor_DOOR *sensor = static_cast<Sensor_DOOR*>(data);
+
+        static unsigned long last_interrupt_time = 0;
+        unsigned long interrupt_time = millis();
+        if (interrupt_time - last_interrupt_time > 20) {
+            int value = digitalRead(sensor->m_pin);
+            if (value == 0) {
+                Serial.println(" DOOOOOOOOOOOOOOOOR OPENED");
+                //TODO send info to logger
+            }else{
+                Serial.println(" DOOOOOOOOOOOOOOOOR CLOSED");
+                //TODO send info to logger
+            }
+        }
+        last_interrupt_time = interrupt_time;
+    };
+
+    pinMode(m_pin, INPUT);
+    attachInterruptArg(m_pin, callback, static_cast<void*>(this), CHANGE);
+
+    update();
 }
 
 void Sensor_DOOR::update() {
-    // TODO
+    m_last_value = static_cast<float>(digitalRead(m_pin));
 }
 
 
@@ -177,7 +210,7 @@ Sensor_BUTTON::Sensor_BUTTON(int pin, void (*callback)(Sensor_BUTTON *button)) {
 }
 
 void Sensor_BUTTON::update() {
-    // TODO    
+    // TODO
 }
 
 // --------------------------------------------------------------------------
@@ -188,5 +221,5 @@ Sensor_DUMMY::Sensor_DUMMY(float min, float max, float max_variation) {
 }
 
 void Sensor_DUMMY::update() {
-    // TODO    
+    // TODO
 }
