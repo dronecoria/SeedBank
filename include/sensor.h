@@ -30,6 +30,7 @@ public:
 
     float get_value();
     String get_type_string();
+    bool is_temperature();
     inline SENSOR_TYPE get_type() {return m_type;}
     inline int get_pin(){return m_pin;}
 

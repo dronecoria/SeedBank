@@ -47,8 +47,10 @@ void Decisor::loop() {
     // }
     float t_max_diff = 0;
     for (auto s : m_config->sensors) {
-        float t = s->get_value();
-        t_max_diff = max(t_max_diff, abs(t - t_avg));
+        if (s->is_temperature()) {
+            float t = s->get_value();
+            t_max_diff = max(t_max_diff, abs(t - t_avg));
+        }
     }
     //t_diff /= num_sensors;
 
