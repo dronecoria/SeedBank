@@ -4,17 +4,17 @@
 #include <functional>
 #include "config.h"
 #include "state.h"
+#include "handler.h"
 
 class Decisor {
 public:
     TaskHandle_t task;
     Decisor(Config *config, State *state);
-    void loop();
+    void loop(float deltatime);
 
-    void select_handler(HANDLER handler);
+    void select_handler(HANDLER_TYPE handler);
 private:
-    void set_handler(std::function<void()> handler);
-    std::function<void()> m_handler;
+    Handler *m_handler = nullptr;
 
     Config *m_config;
     State *m_state;

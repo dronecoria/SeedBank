@@ -73,7 +73,7 @@ void Config::read() {
     // Parse JSON configuration
     Serial.println("Config::Parsing JSON config");
     this->m_mode = this->decode_json_key_as_mode(doc, "mode", MODE::SETUP);
-    this->m_handler = this->decode_json_key_as_handler(doc, "handler", HANDLER::TEST);
+    this->m_handler = this->decode_json_key_as_handler(doc, "handler", HANDLER_TYPE::TEST);
 
     this->m_ntp_server = this->decode_json_key_as_name(doc, "ntp_server", "pool.ntp.org");
     this->m_ntp_gmt_offset = this->decode_json_key_as_long(doc, "ntp_gmt_offset", 0);
@@ -124,7 +124,7 @@ Actuator* Config::set_actuator(String type, int value)
 MODE Config::get_mode() {
     return this->m_mode;
 }
-HANDLER Config::get_handler(){
+HANDLER_TYPE Config::get_handler(){
     return m_handler;
 }
 
@@ -142,11 +142,11 @@ String Config::get_mode_string() {
 String Config::get_handler_string() {
     switch (m_handler)
     {
-        case HANDLER::TEST:
+        case HANDLER_TYPE::TEST:
             return "test";
-        case HANDLER::BASIC:
+        case HANDLER_TYPE::BASIC:
             return "basic";
-        case HANDLER::PID:
+        case HANDLER_TYPE::PID:
             return "pid";
     }
     return "unknow";
@@ -195,14 +195,14 @@ MODE Config::decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE de
     return default_value;
 }
 
-HANDLER Config::decode_json_key_as_handler(JsonDocument& doc, const char* key, HANDLER default_value) {
+HANDLER_TYPE Config::decode_json_key_as_handler(JsonDocument& doc, const char* key, HANDLER_TYPE default_value) {
     if (doc.containsKey(key) && doc[key].is<const char*>()) {
         if (strcmp(doc[key].as<const char*>(), "test") == 0) {
-            return HANDLER::TEST;
+            return HANDLER_TYPE::TEST;
         }else if (strcmp(doc[key].as<const char*>(), "basic") == 0) {
-            return HANDLER::BASIC;
+            return HANDLER_TYPE::BASIC;
         }else if (strcmp(doc[key].as<const char*>(), "pid") == 0) {
-            return HANDLER::PID;
+            return HANDLER_TYPE::PID;
         }
     }
     return default_value;

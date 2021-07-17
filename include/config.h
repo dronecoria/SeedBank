@@ -9,7 +9,7 @@
 #define CONFIG_FILENAME "/config.json"
 
 enum class MODE { SETUP = 0, NORMAL };
-enum class HANDLER { TEST, BASIC, PID };
+enum class HANDLER_TYPE { TEST, BASIC, PID, SIMULATE };
 
 
 class Config {
@@ -20,7 +20,7 @@ public:
     void read();
 
     MODE get_mode();
-    HANDLER get_handler();
+    HANDLER_TYPE get_handler();
     String get_mode_string();
     String get_handler_string();
     String get_ntp_server();
@@ -44,7 +44,7 @@ public:
 
 private:
     MODE m_mode = MODE::SETUP;
-    HANDLER m_handler = HANDLER::TEST;
+    HANDLER_TYPE m_handler = HANDLER_TYPE::TEST;
 
     String m_ntp_server = "";
 
@@ -55,7 +55,7 @@ private:
     String m_wifi_password = "";
 
     MODE decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE default_value);
-    HANDLER decode_json_key_as_handler(JsonDocument& doc, const char* key, HANDLER default_value);
+    HANDLER_TYPE decode_json_key_as_handler(JsonDocument& doc, const char* key, HANDLER_TYPE default_value);
     long decode_json_key_as_long(JsonDocument &doc, const char *key, long int default_value);
     String decode_json_key_as_name(JsonDocument &doc, const char *key, const char *default_value);
 
