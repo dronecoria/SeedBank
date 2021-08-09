@@ -2,18 +2,18 @@
 
 void loop_decisor_task(void *p_decisor) {
     Decisor *decisor = (Decisor *) p_decisor;
-    unsigned long currentMicros = micros();
-    unsigned long previousMicros = 0;
+    unsigned long currentTime = millis();
+    unsigned long previousTime = 0;
     while(true) {
-        currentMicros = millis();
-        decisor->loop(currentMicros - previousMicros);
+        currentTime = millis();
+        decisor->loop(currentTime - previousTime);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        previousMicros = currentMicros;
+        previousTime = currentTime;
     }
 }
 
 Decisor::Decisor(Config *config, State *state) {
-    Serial.println("Setup Decisor");
+    SERIAL_PRINTLN("Setup Decisor");
     this->m_config = config;
     this->m_state = state;
 
