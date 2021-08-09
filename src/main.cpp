@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <SPIFFS.h>
 
+#include "defines.h"
 #include "config.h"
 #include "state.h"
 #include "display.h"
@@ -16,10 +17,12 @@ Decisor *decisor;
 
 void setup() {
     // Initialize hardware
+#ifdef DEBUG_SERIAL
     Serial.begin(115200);
-    Serial.println("Main::Boot");
+#endif
+    SERIAL_PRINTLN("Main::Boot");
 
-    Serial.println("Main::Setup SPIFFS");
+    SERIAL_PRINTLN("Main::Setup SPIFFS");
     SPIFFS.begin();
 
     // Read configuration from Flash

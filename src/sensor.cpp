@@ -157,8 +157,8 @@ Sensor_BMP280::Sensor_BMP280(int address) {
     this->m_pin = address;
     this->m_sensor = new Adafruit_BMP280();
     if (!this->m_sensor->begin(this->m_pin)) {
-        Serial.print("Could not find a BMP280 sensor at address ");
-        Serial.println(this->m_pin);
+        SERIAL_PRINT("Could not find a BMP280 sensor at address ");
+        SERIAL_PRINTLN(this->m_pin);
     }
     this->m_sensor->setSampling(
         Adafruit_BMP280::MODE_NORMAL,     // Operating Mode.
@@ -198,10 +198,10 @@ Sensor_DOOR::Sensor_DOOR(int pin) {
         if (interrupt_time - last_interrupt_time > 20) {
             int value = digitalRead(sensor->m_pin);
             if (value == 0) {
-                Serial.println(" DOOOOOOOOOOOOOOOOR OPENED");
+                SERIAL_PRINTLN(" DOOR OPENED");
                 //TODO send info to logger
             }else{
-                Serial.println(" DOOOOOOOOOOOOOOOOR CLOSED");
+                SERIAL_PRINTLN(" DOOR CLOSED");
                 //TODO send info to logger
             }
         }

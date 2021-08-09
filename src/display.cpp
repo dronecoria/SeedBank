@@ -12,7 +12,7 @@ void loop_display_task(void *p_display) {
 */
 
 Display::Display(Config *config, State *state) {
-    Serial.println("Setup Display");
+    SERIAL_PRINTLN("Setup Display");
     this->m_config = config;
     this->m_state = state;
 
@@ -33,14 +33,15 @@ void Display::loop() {
     tm time_info;
     char time_str[20];  // 2021-05-21 12:32:45
 
-    Serial.print("Display::loop");
+    SERIAL_PRINT("Display::loop");
+
     if (this->m_state->is_clock_set) {
         getLocalTime(&time_info);
         strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", &time_info);
-        Serial.print(" - Time: ");
-        Serial.print(time_str);
-        Serial.println("");
+        SERIAL_PRINT(" - Time: ");
+        SERIAL_PRINT(time_str);
+        SERIAL_PRINTLN("");
     } else {
-        Serial.println("Display::Clock is not set");
+        SERIAL_PRINTLN("Display::Clock is not set");
     }
 }

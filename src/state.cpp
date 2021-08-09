@@ -2,7 +2,7 @@
 #include "sensor.h"
 
 State::State(Config *config) {
-    Serial.println("Setup State");
+    SERIAL_PRINTLN("Setup State");
     this->m_config = config;
     // TODO
 }
@@ -32,12 +32,14 @@ void State::sensors_update() {
 }
 
 void State::print_all_temperatures() {
-    Serial.print("[");
+#ifdef DEBUG_SERIAL
+    SERIAL_PRINT("[");
     for (Sensor *s : this->m_config->sensors) {
         if (s->is_temperature()) {
-            Serial.print(s->get_value());
-            Serial.print(", ");
+            SERIAL_PRINT(s->get_value());
+            SERIAL_PRINT(", ");
         }
     }
-    Serial.print("]");
+    SERIAL_PRINT("]");
+#endif
 }

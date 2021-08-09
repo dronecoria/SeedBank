@@ -2,11 +2,12 @@
 #define CONFIG_H
 
 #include <ArduinoJson.h>
+
+#include "defines.h"
 #include "sensor.h"
 #include "actuator.h"
 #include "timetable.h"
 
-#define CONFIG_FILENAME "/config.json"
 
 enum class MODE { SETUP = 0, NORMAL };
 enum class HANDLER_TYPE { TEST, BASIC, PID, SIMULATE };

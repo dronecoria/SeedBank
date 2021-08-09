@@ -4,12 +4,12 @@
 
 
 Config::Config() {
-    Serial.println("Config::Setup");
+    SERIAL_PRINTLN("Config::Setup");
     this->read();
 }
 
 Config::~Config() {
-    Serial.println("Config::Destroy");
+    SERIAL_PRINTLN("Config::Destroy");
 }
 
 void Config::reset() {
@@ -46,18 +46,18 @@ void Config::read() {
     DeserializationError error;
     File file;
 
-    Serial.println("Config::Reading JSON config from Flash");
+    SERIAL_PRINTLN("Config::Reading JSON config from Flash");
     file = SPIFFS.open(CONFIG_FILENAME, FILE_READ);
     if (!file) {
-        Serial.println("Configuration file not found. Setting default config");
+        SERIAL_PRINTLN("Configuration file not found. Setting default config");
         this->reset();
         file = SPIFFS.open(CONFIG_FILENAME, FILE_READ);
     }
 
-    Serial.println("Config::Decoding JSON config");
+    SERIAL_PRINTLN("Config::Decoding JSON config");
     error = deserializeJson(doc, file);
     if (error || !doc.containsKey("mode")){
-        Serial.println("Configuration file is corrupted. Setting default config");
+        SERIAL_PRINTLN("Configuration file is corrupted. Setting default config");
         this->reset();
         file = SPIFFS.open(CONFIG_FILENAME, FILE_READ);
         error = deserializeJson(doc, file);
@@ -65,13 +65,13 @@ void Config::read() {
     file.close();
 
     if (error) {
-        Serial.print(F("Config::deserializeJson() failed: "));
-        Serial.println(error.f_str());
+        SERIAL_PRINT(F("Config::deserializeJson() failed: "));
+        SERIAL_PRINTLN(error.f_str());
         return;
     }
 
     // Parse JSON configuration
-    Serial.println("Config::Parsing JSON config");
+    SERIAL_PRINTLN("Config::Parsing JSON config");
     this->m_mode = this->decode_json_key_as_mode(doc, "mode", MODE::SETUP);
     this->m_handler = this->decode_json_key_as_handler(doc, "handler", HANDLER_TYPE::TEST);
 

@@ -12,8 +12,6 @@ Handler_basic::~Handler_basic() {}
 
 void Handler_basic::run(float deltatime)
 {
-    Serial.println("BASIC HANDLER");
-
     float t_avg = m_state->get_avg_temperature();
     float t_reference = m_config->get_temperature_reference();
 
@@ -55,19 +53,20 @@ void Handler_basic::run(float deltatime)
     }
 
     // DEBUG INFO
-    Serial.print("Decisor::loop");
-    Serial.print(" - Avg Temp: ");
-    Serial.print(t_avg);
-    Serial.print(" - All: ");
+    SERIAL_PRINT("Decisor::loop");
+    SERIAL_PRINT(" - Avg Temp: ");
+    SERIAL_PRINT(t_avg);
+    SERIAL_PRINT(" - All: ");
+
     m_state->print_all_temperatures();
 
-    Serial.print("   REF: ");
-    Serial.print(t_reference);
+    SERIAL_PRINT("   REF: ");
+    SERIAL_PRINT(t_reference);
 
-    Serial.print("   MAX DIFF: ");
-    Serial.print(t_max_diff);
+    SERIAL_PRINT("   MAX DIFF: ");
+    SERIAL_PRINT(t_max_diff);
 
-    Serial.println("");
+    SERIAL_PRINTLN("");
 
 }
 
@@ -93,23 +92,31 @@ void Handler_pid::run(float deltatime) {
     float D = (error - previous_error) / deltatime;
     float output = Kp * P + Ki * integral + Kd * D;
     output = output / (5.0f * Kp); // scale for values between 0 and 1
-    Serial.println("  error:" + String(error) + "    P error:" + String(previous_error) );
+    SERIAL_PRINTLN("  error:" + String(error) + "    P error:" + String(previous_error) );
 
     previous_error = error;
 
 
     if (m_config->cold != nullptr) {
-        if (output < -0.5f) {
-            m_config->cold->enable();
-        } else if(m_config->cold->is_active()){
+        if (t_reference > t_avg) {
+            if (output < -0.5f) {
+                m_config->cold->enable();
+            } else if(m_config->cold->is_active()){
+                m_config->cold->disable();
+            }
+        }else{
             m_config->cold->disable();
         }
     }
 
     if (m_config->heat != nullptr) {
-        if (output > 0) {
-            m_config->heat->set_value(output);
-        } else if (m_config->heat->is_active()) {
+        if(t_reference > t_avg){
+            if (output > 0) {
+                m_config->heat->set_value(output);
+            } else if (m_config->heat->is_active()) {
+                m_config->heat->disable();
+            }
+        }else{
             m_config->heat->disable();
         }
     }
@@ -131,5 +138,5 @@ void Handler_pid::run(float deltatime) {
         }
     }
 
-    Serial.println("PID  P:"+String(P)+"   I:"+String(integral)+ "   D:"+String(D)+ "     OUTPUT:"+String(output) + "         dt:"+String(deltatime));
+    SERIAL_PRINTLN("PID  P:"+String(P)+"   I:"+String(integral)+ "   D:"+String(D)+ "     OUTPUT:"+String(output) + "         dt:"+String(deltatime));
 }

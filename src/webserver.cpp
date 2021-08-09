@@ -4,6 +4,7 @@
 #include <SPIFFS.h>
 #include <AsyncElegantOTA.h>
 
+#include "defines.h"
 #include "webserver.h"
 
 void loop_webserver_task(void *p_webserver) {
@@ -15,7 +16,7 @@ void loop_webserver_task(void *p_webserver) {
 }
 
 WebServer::WebServer(Config *config, State *state) {
-    Serial.println("Setup WebServer");
+    SERIAL_PRINTLN("Setup WebServer");
     this->m_config = config;
     this->m_state = state;
 
@@ -31,10 +32,10 @@ WebServer::WebServer(Config *config, State *state) {
 }
 
 void WebServer::loop() {
-    Serial.print("WebServer::loop - SSID: ");
-    Serial.print(WiFi.SSID());
-    Serial.print(" - IP: ");
-    Serial.println(WiFi.localIP());
+    SERIAL_PRINT("WebServer::loop - SSID: ");
+    SERIAL_PRINT(WiFi.SSID());
+    SERIAL_PRINT(" - IP: ");
+    SERIAL_PRINTLN(WiFi.localIP());
     // TODO
     if (!this->m_initialized) {
         this->init();
@@ -68,7 +69,7 @@ void WebServer::init_access_point() {
     WiFi.mode(WIFI_AP);
     while (!WiFi.softAP(ssid))
     {
-        Serial.println(".");
+        SERIAL_PRINTLN(".");
         delay(1000);
     }
     WiFi.softAPConfig(ip, gateway, subnet);
@@ -83,7 +84,7 @@ void WebServer::init_wifi_client() {
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(1000);
-        Serial.print('.');
+        SERIAL_PRINT('.');
         if(tries >= 10) break;
         tries++;
     }
@@ -261,13 +262,13 @@ void save_setup(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_
 
     File file = SPIFFS.open(CONFIG_FILENAME, FILE_WRITE);
     if (!file) {
-        Serial.println("Failed to open file for writing");
+        SERIAL_PRINTLN("Failed to open file for writing");
         return;
     }
     if (file.print(bodyContent)) {
-        Serial.println("File written");
+        SERIAL_PRINTLN("File written");
     } else {
-        Serial.println("Write failed");
+        SERIAL_PRINTLN("Write failed");
     }
 
     file.close();
@@ -285,13 +286,13 @@ void WebServer::set_value(String json) {
 
     error = deserializeJson(doc, json);
     if (error || !doc.containsKey("name") || !doc.containsKey("value")) {
-        Serial.println("Error in parameters");
+        SERIAL_PRINTLN("Error in parameters");
         return;
     }
     String name = doc["name"].as<const char*>();
     float value = doc["value"].as<float>();
 
-    Serial.println("Change value of " + name + " to " + String(value));
+    SERIAL_PRINTLN("Change value of " + name + " to " + String(value));
 
     if(name == "heat"){
         m_config->heat->set_value(value);

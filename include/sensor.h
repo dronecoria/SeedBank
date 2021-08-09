@@ -7,7 +7,9 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-#define TEMP_ERROR_READING -1000.0
+#include "defines.h"
+
+
 
 #ifndef DS18B20_TEMP_PRECISION
 #define DS18B20_TEMP_PRECISION 12
