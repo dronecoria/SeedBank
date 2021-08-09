@@ -2,6 +2,8 @@
 #define CONFIG_H
 
 #include <ArduinoJson.h>
+#include <WiFi.h>
+
 
 #include "defines.h"
 #include "sensor.h"
@@ -29,6 +31,7 @@ public:
     long int get_ntp_daylight_offset();
     String get_wifi_ssid();
     String get_wifi_password();
+    String get_id(){ return m_id_device;}
 
     float get_temperature_reference();
 
@@ -46,6 +49,8 @@ public:
 private:
     MODE m_mode = MODE::SETUP;
     HANDLER_TYPE m_handler = HANDLER_TYPE::TEST;
+
+    String m_id_device = WiFi.macAddress();
 
     String m_ntp_server = "";
 
