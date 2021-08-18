@@ -163,7 +163,28 @@ void WebServer::init_mqtt() {
     if(!m_state->is_mqtt_set){
         m_mqttClient.setClient(m_wifiClient);
         //TODO create a configurable variable in config for server & port
-        m_mqttClient.setServer("192.168.1.130", 1883);
+    //TODO fix bug in resolution dns
+/*
+
+        IPAddress dns = WiFi.dnsIP();
+        Serial.println("DNS server");
+        Serial.println(dns.toString());
+
+        // IPAddress ipaddr;  // dns randomly fail in mqttclient
+        // ipaddr.fromString(m_config->get_mqtt_server().c_str());
+
+
+        IPAddress ipaddr = MDNS.queryHost(m_config->get_mqtt_server().c_str());
+        Serial.println(ipaddr.toString());
+        if( strcmp(ipaddr.toString().c_str(), "0.0.0.0") == 0 ){
+            Serial.println("BAD DNS resolution");
+            return;
+        }
+*/
+        IPAddress ipaddr;
+        ipaddr.fromString(m_config->get_mqtt_server().c_str());
+
+        m_mqttClient.setServer(ipaddr, m_config->get_mqtt_port());
         m_mqttClient.setCallback(mqtt_callback);
         m_state->is_mqtt_set = true;
     }
@@ -173,7 +194,13 @@ void WebServer::reconnect_mqtt() {
     //while (!m_mqttClient.connected()) {
     if(!m_mqttClient.connected()) {
         Serial.println("Reconnecting to MQTT Broker..");
-        if (m_mqttClient.connect(m_config->get_id().c_str())) {
+         bool connected;
+        if (strcmp(m_config->get_mqtt_username().c_str(), "") != 0 ) {
+            connected = m_mqttClient.connect(m_config->get_id().c_str(), m_config->get_mqtt_username().c_str(), m_config->get_mqtt_password().c_str());
+        }else{
+            connected = m_mqttClient.connect(m_config->get_id().c_str());
+        }
+        if ( connected ) {
             Serial.println("Connected.");
             // subscribe to topics
             m_mqttClient.subscribe( String(m_config->get_id()+"/commands/#").c_str() );

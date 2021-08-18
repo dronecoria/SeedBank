@@ -32,6 +32,10 @@ public:
     String get_wifi_ssid();
     String get_wifi_password();
     String get_id(){ return m_id_device;}
+    String get_mqtt_server() { return m_mqtt_server; }
+    String get_mqtt_username() { return m_mqtt_username; }
+    String get_mqtt_password() { return m_mqtt_password; }
+    int get_mqtt_port() { return m_mqtt_port; }
 
     float get_temperature_reference();
 
@@ -57,12 +61,17 @@ private:
     long int m_ntp_gmt_offset = 0;
     long int m_ntp_daylight_offset = 0;
 
+    String m_mqtt_server = ""; // 46.183.116.207
+    String m_mqtt_username = "";
+    String m_mqtt_password = "";
+    int m_mqtt_port = 1883;
+
     String m_wifi_ssid = "";
     String m_wifi_password = "";
 
     MODE decode_json_key_as_mode(JsonDocument &doc, const char *key, MODE default_value);
     HANDLER_TYPE decode_json_key_as_handler(JsonDocument& doc, const char* key, HANDLER_TYPE default_value);
-    long decode_json_key_as_long(JsonDocument &doc, const char *key, long int default_value);
+    long decode_json_key_as_long(JsonDocument& doc, const char* key, long int default_value);
     String decode_json_key_as_name(JsonDocument &doc, const char *key, const char *default_value);
 
     Actuator* set_actuator(String type, int value);

@@ -46,6 +46,43 @@
                     </label>
                 </fieldset>
                 <fieldset>
+                    <legend>Mqtt server</legend>
+                    <label>
+                        Server (ip, dont resolv name well)
+                        <input
+                            name="mqtt_server"
+                            type="text"
+                            placeholder="46.183.116.207"
+                            required
+                        />
+                    </label>
+                    <label>
+                        Port
+                        <input
+                            name="mqtt_port"
+                            type="number"
+                            placeholder="1883"
+                            required
+                        />
+                    </label>
+                    <label>
+                        Username
+                        <input
+                            name="mqtt_username"
+                            type="text"
+                            placeholder="Empty if none"
+                        />
+                    </label>
+                    <label>
+                        Password
+                        <input
+                            name="mqtt_password"
+                            type="text"
+                            placeholder="Mqtt Password"
+                        />
+                    </label>
+                </fieldset>
+                <fieldset>
                     <legend>Time</legend>
                     <label>
                         NTP server

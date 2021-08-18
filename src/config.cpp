@@ -81,6 +81,11 @@ void Config::read() {
     this->m_wifi_ssid = this->decode_json_key_as_name(doc, "wifi_ssid", "");
     this->m_wifi_password = this->decode_json_key_as_name(doc, "wifi_password", "");
 
+    this->m_mqtt_server = this->decode_json_key_as_name(doc, "mqtt_server", "");
+    this->m_mqtt_port = static_cast<int>(this->decode_json_key_as_long(doc, "mqtt_port", 1883));
+    this->m_mqtt_username = this->decode_json_key_as_name(doc, "mqtt_username", "");
+    this->m_mqtt_password = this->decode_json_key_as_name(doc, "mqtt_password", "");
+
     for (JsonObject repo : doc["sensors"].as<JsonArray>()) {
         if (strcmp(repo["type"].as<const char*>(), "DS18B20") == 0) {
             this->sensors.push_back(new Sensor_DS18B20(repo["value"].as<int>()));
