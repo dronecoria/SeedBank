@@ -17,9 +17,7 @@ Decisor *decisor;
 
 void setup() {
     // Initialize hardware
-#ifdef DEBUG_SERIAL
     Serial.begin(115200);
-#endif
     SERIAL_PRINTLN("Main::Boot");
 
     SERIAL_PRINTLN("Main::Setup SPIFFS");

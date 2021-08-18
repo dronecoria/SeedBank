@@ -1,6 +1,7 @@
 #ifndef SB_WEBSERVER_H
 #define SB_WEBSERVER_H
 
+#include <PubSubClient.h>
 #include <ESPAsyncWebServer.h>
 #include "config.h"
 #include "state.h"
@@ -13,6 +14,8 @@ public:
     void loop();
 
 private:
+    WiFiClient m_wifiClient;
+    PubSubClient m_mqttClient;
     Config *m_config;
     State *m_state;
 
@@ -25,7 +28,10 @@ private:
     void check_ntp();
     void init_access_point();
     void init_wifi_client();
-    void init_server();
+    void init_web_server();
+    void init_mqtt();
+    void reconnect_mqtt();
+    //void mqtt_callback(char* topic, byte* payload, unsigned int length);
     void send_data();
 
     String get_status();

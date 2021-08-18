@@ -4,7 +4,6 @@
 #include <SPIFFS.h>
 #include <AsyncElegantOTA.h>
 
-#include "defines.h"
 #include "webserver.h"
 
 void loop_webserver_task(void *p_webserver) {
@@ -39,10 +38,17 @@ void WebServer::loop() {
     // TODO
     if (!this->m_initialized) {
         this->init();
-    } else {
-        this->check_ntp();
-        //this->send_data(); //TODO what data??
+        return;
     }
+
+    this->check_ntp();
+    if (!m_mqttClient.connected()){
+        this->init_mqtt();
+        return;
+    }
+
+    this->send_data();
+    m_mqttClient.loop();
 }
 
 void WebServer::init() {
@@ -55,7 +61,7 @@ void WebServer::init() {
         this->init_wifi_client();
     }
     if (this->m_initialized) {
-        this->init_server();
+        this->init_web_server();
     }
 }
 
@@ -97,7 +103,7 @@ void WebServer::init_wifi_client() {
     }
 }
 
-void WebServer::init_server() {
+void WebServer::init_web_server() {
 
     if (this->m_webserver != nullptr) {
         // destroy previous if exist
@@ -141,6 +147,41 @@ void WebServer::init_server() {
     this->m_webserver->begin();
 }
 
+void mqtt_callback(char* topic, byte* payload, unsigned int length) {
+    Serial.println("");
+    Serial.print("Callback - ");
+    Serial.print(topic);
+    Serial.println("");
+    Serial.print("Message:");
+    for (int i = 0; i < length; i++) {
+        Serial.print((char)payload[i]);
+    }
+    Serial.println("");
+}
+
+void WebServer::init_mqtt() {
+    if(!m_state->is_mqtt_set){
+        m_mqttClient.setClient(m_wifiClient);
+        //TODO create a configurable variable in config for server & port
+        m_mqttClient.setServer("192.168.1.130", 1883);
+        m_mqttClient.setCallback(mqtt_callback);
+        m_state->is_mqtt_set = true;
+    }
+    reconnect_mqtt();
+}
+void WebServer::reconnect_mqtt() {
+    //while (!m_mqttClient.connected()) {
+    if(!m_mqttClient.connected()) {
+        Serial.println("Reconnecting to MQTT Broker..");
+        if (m_mqttClient.connect(m_config->get_id().c_str())) {
+            Serial.println("Connected.");
+            // subscribe to topics
+            m_mqttClient.subscribe( String(m_config->get_id()+"/commands/#").c_str() );
+        }
+
+    }
+}
+
 void WebServer::check_ntp() {
     if(this->m_state->is_clock_set) return;
 
@@ -151,6 +192,25 @@ void WebServer::check_ntp() {
 }
 
 void WebServer::send_data() {
+    String topic = m_config->get_id();
+    bool all_temps_valids = true;
+    int i = 0;
+    for (Sensor* s : this->m_config->sensors) {
+        if (s->is_temperature()) {
+            if (s->is_valid()) {
+                m_mqttClient.publish(String(topic + "/sensors/temp/" + String(i)).c_str(), String(s->get_value(),5).c_str() );
+            }else{
+                all_temps_valids = false;
+            }
+        }else{
+            m_mqttClient.publish(String(topic + "/sensors/" + s->get_type_string() + "/" + String(i)).c_str(), String(s->get_value()).c_str());
+        }
+        i++;
+    }
+    if(all_temps_valids){
+        m_mqttClient.publish(String(topic + "/sensors/avgTemp").c_str(), String(m_state->get_avg_temperature(),5).c_str());
+    }
+
 }
 
 void WebServer::set_default_time() {
