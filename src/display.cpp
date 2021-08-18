@@ -22,7 +22,7 @@ Display::Display(Config *config, State *state) {
 
     tft.setRotation(0);
     tft.fillScreen(ST77XX_MAGENTA);
-    delay(1500);
+    delay(500);
     tft.fillScreen(ST77XX_BLACK);
 
     /*
@@ -43,7 +43,7 @@ void Display::screen_ip()
     tft.setRotation(1);
 
     tft.setTextWrap(true);
-    tft.fillScreen(ST77XX_BLACK);
+    //tft.fillScreen(ST77XX_BLACK);
 
     tft.setTextSize(2);
     tft.setTextColor(ST77XX_YELLOW,ST77XX_BLACK);
@@ -71,9 +71,10 @@ void Display::screen_ip()
     }else{
         tft.print("\n  ");
         tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
+        tft.print(String(m_state->get_avg_temperature(), 2));
     }
-
-    tft.print(String(m_state->get_avg_temperature(), 2));
+    tft.print("\n  ");
+    tft.print("\n  ");
 }
 
 void Display::loop()
