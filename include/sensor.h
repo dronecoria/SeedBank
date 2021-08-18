@@ -34,11 +34,13 @@ public:
     String get_type_string();
     bool is_temperature();
     inline SENSOR_TYPE get_type() {return m_type;}
-    inline int get_pin(){return m_pin;}
+    inline int get_pin() { return m_pin; }
+    inline bool is_valid() { return true; }// m_last_value != TEMP_ERROR_READING; } //TODO add last update value to the condition?
 
 protected:
     SENSOR_TYPE m_type = SENSOR_TYPE::NONE;
     int m_pin = -1;
+
     float m_last_value = TEMP_ERROR_READING;
 };
 

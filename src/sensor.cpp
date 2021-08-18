@@ -137,15 +137,13 @@ void Sensor_HDC2080::reload()
  }
 
 void Sensor_HDC2080::update() {
-    if (this->m_sensor != nullptr) {
-        this->m_last_value = TEMP_ERROR_READING;
-    }
     float t = this->m_sensor->readTemp();
     if (t == -40.0) {
         t = TEMP_ERROR_READING;
         reload();
     }
     this->m_last_value = t;
+
 }
 
 
@@ -190,6 +188,8 @@ Sensor_DOOR::Sensor_DOOR(int pin) {
     m_pin = pin;
     m_type = SENSOR_TYPE::DOOR;
 
+/*
+Not work well, sometimes crash the program
     auto callback =  [](void* data) {
         Sensor_DOOR *sensor = static_cast<Sensor_DOOR*>(data);
 
@@ -210,7 +210,7 @@ Sensor_DOOR::Sensor_DOOR(int pin) {
 
     pinMode(m_pin, INPUT);
     attachInterruptArg(m_pin, callback, static_cast<void*>(this), CHANGE);
-
+*/
     update();
 }
 
