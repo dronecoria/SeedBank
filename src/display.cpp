@@ -16,6 +16,15 @@ Display::Display(Config *config, State *state) {
     this->m_config = config;
     this->m_state = state;
 
+    SPI.begin(TFT_SCLK, TFT_MISO, TFT_MOSI);
+
+    tft.init(240, 240, SPI_MODE2);
+
+    tft.setRotation(0);
+    tft.fillScreen(ST77XX_MAGENTA);
+    delay(1500);
+    tft.fillScreen(ST77XX_BLACK);
+
     /*
     xTaskCreatePinnedToCore(
         loop_display_task,  // Function to implement the task
@@ -28,20 +37,50 @@ Display::Display(Config *config, State *state) {
     */
 }
 
-void Display::loop() {
+void Display::screen_ip()
+{
+    tft.setCursor(0, 0);
+    tft.setRotation(1);
 
-    tm time_info;
-    char time_str[20];  // 2021-05-21 12:32:45
+    tft.setTextWrap(true);
+    tft.fillScreen(ST77XX_BLACK);
 
-    SERIAL_PRINT("Display::loop");
+    tft.setTextSize(2);
+    tft.setTextColor(ST77XX_YELLOW,ST77XX_BLACK);
+    tft.print("\n  ");
+    tft.print("\n  ");
+    tft.print(WiFi.SSID());
+    tft.print("\n  ");
+    //tft.print(WiFi.getHostname());
+    //tft.print("\n");
+    //tft.print(WiFi.networkID().toString());
+    tft.print("\n  ");
 
-    if (this->m_state->is_clock_set) {
-        getLocalTime(&time_info);
-        strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", &time_info);
-        SERIAL_PRINT(" - Time: ");
-        SERIAL_PRINT(time_str);
-        SERIAL_PRINTLN("");
-    } else {
-        SERIAL_PRINTLN("Display::Clock is not set");
+    tft.print(WiFi.macAddress());
+
+    tft.print("\n\n");
+    tft.setTextSize(3);
+    tft.setTextColor(ST77XX_YELLOW,ST77XX_BLACK);
+    tft.print(WiFi.localIP().toString());
+    tft.print("\n");
+
+
+    tft.setTextSize(4);
+    if (m_state->get_avg_temperature() == TEMP_ERROR_READING){
+        tft.print("\n  --");
+    }else{
+        tft.print("\n  ");
+        tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
+    }
+
+    tft.print(String(m_state->get_avg_temperature(), 2));
+}
+
+void Display::loop()
+{
+    if (m_config->get_mode() == MODE::SETUP) {
+        screen_ip();
+    }else{
+        screen_ip();
     }
 }
