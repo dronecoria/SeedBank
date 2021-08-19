@@ -18,26 +18,29 @@ void Config::reset() {
         {
             "sensors": [
                 { "type": "HDC2080", "value" : 64 },
-                { "type": "HDC2080", "value" : 65 }
+                { "type": "HDC2080", "value" : 65 },
+                { "type": "DOOR", "value": 4 }
             ] ,
             "schedule" : [
-                { "start": "00:00", "end" : "24:00", "value" : 10 }
+                { "start": "00:00", "end" : "00:00", "value" : 20 }
             ] ,
             "mode" : "setup",
-            "handler" : "test"
+            "handler" : "test",
             "wifi_ssid" : "",
             "wifi_password" : "",
             "ntp_server" : "pool.ntp.org",
             "ntp_gmt_offset" : 2,
+            "mqtt_server": "lab.semillistas.es",
+            "mqtt_port": 1883,
+            "mqtt_username": "",
+            "mqtt_password": "",
             "heat" :  { "type": "PWM", "value" : 16 },
             "cold" :  { "type": "RELAY", "value" : 19 },
             "fan" :   { "type": "RELAY", "value" : 18 },
-            "light" : { "type": "NONE", "value" : 5 },
+            "light" : { "type": "NONE", "value" : 5 }
         }
     )";
     file.print(default_values);
-    //file.print("{\"mode\": \"setup\", \"ntp_server\": \"pool.ntp.org\", \"ntp_gmt_offset\": 0, \"ntp_daylight_offset\": 0}");
-
     file.close();
 }
 
