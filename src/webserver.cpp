@@ -162,29 +162,12 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
 void WebServer::init_mqtt() {
     if(!m_state->is_mqtt_set){
         m_mqttClient.setClient(m_wifiClient);
-        //TODO create a configurable variable in config for server & port
-    //TODO fix bug in resolution dns
-/*
-
-        IPAddress dns = WiFi.dnsIP();
-        Serial.println("DNS server");
-        Serial.println(dns.toString());
-
-        // IPAddress ipaddr;  // dns randomly fail in mqttclient
-        // ipaddr.fromString(m_config->get_mqtt_server().c_str());
-
-
-        IPAddress ipaddr = MDNS.queryHost(m_config->get_mqtt_server().c_str());
-        Serial.println(ipaddr.toString());
-        if( strcmp(ipaddr.toString().c_str(), "0.0.0.0") == 0 ){
-            Serial.println("BAD DNS resolution");
+        IPAddress ip;
+        if (!WiFi.hostByName(m_config->get_mqtt_server().c_str(), ip)) {
+            Serial.println("ERROR RESOLUTION DNS");
             return;
         }
-*/
-        IPAddress ipaddr;
-        ipaddr.fromString(m_config->get_mqtt_server().c_str());
-
-        m_mqttClient.setServer(ipaddr, m_config->get_mqtt_port());
+        m_mqttClient.setServer(ip, m_config->get_mqtt_port());
         m_mqttClient.setCallback(mqtt_callback);
         m_state->is_mqtt_set = true;
     }
